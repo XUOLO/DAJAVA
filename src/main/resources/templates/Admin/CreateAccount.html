@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{Admin/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="main-panel"class="main-panel">
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-md-6 grid-margin stretch-card">
+        <div class="card" style="width: 130%; min-width: 160%;">
+
+          <div class="card-body">
+            <h4 class="card-title">Default form</h4>
+            <p class="card-description">
+              Basic form layout
+            </p>
+            <form class="forms-sample">
+              <div class="form-group">
+                <label for="Name">Name</label>
+                <input type="text" class="form-control" id="Name" placeholder="Name">
+              </div>
+              <div class="form-group">
+                <label for="Username">Username</label>
+                <input type="text" class="form-control" id="Username" placeholder="Username">
+              </div>
+              <div class="form-group">
+                <label for="Email">Email address</label>
+                <input type="email" class="form-control" id="Email" placeholder="Email">
+              </div>
+              <div class="form-group">
+                <label for="roles">Roles</label>
+                <select multiple class="form-control" id="roles" name="roles">
+                  <option value="1">ADMIN</option>
+                  <option value="2">EMPLOYEE</option>
+
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="Password">Password</label>
+                <input type="password" class="form-control" id="Password" placeholder="Password">
+              </div>
+              <div class="form-group">
+                <label for="ConfirmPassword">Confirm Password</label>
+                <input type="password" class="form-control" id="ConfirmPassword"  >
+              </div>
+
+              <button type="submit" class="btn btn-primary me-2">Submit</button>
+              <button class="btn btn-light">Cancel</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+</div>
+</body>
+</html>

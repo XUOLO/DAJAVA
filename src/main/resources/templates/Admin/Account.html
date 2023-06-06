@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{Admin/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <div layout:fragment="main-panel"class="main-panel">
+        <div class="content-wrapper" style="  background: #F4F5F7;
+    padding: 1.5rem 2.187rem 1.5rem 3.5rem;
+    width: 180%;
+    -webkit-flex-grow: 1;
+    flex-grow: 1;" >
+
+                <div class="col-lg-6 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Account Table</h4>
+                            <p class="card-description">
+                                <a href="/admin/CreateAccount"> Add account</a>
+                            </p>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>ROLE</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="user : ${listUser}">
+                                        <td th:text="${user.id}"> ID</td>
+                                        <td th:text="${user.name}">Name</td>
+                                        <td th:text="${user.email}">Email</td>
+                                        <td th:text="${user.role}" ></td>
+
+                                        <td>
+                                            <a th:href="@{'/admin/edit/' + ${user.id}}">Edit</a>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <a th:href="@{'/admin/delete/' + ${user.id}}" onclick="return confirm('Are you sure?')">Delete</a>
+
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+
+        <!-- partial -->
+    </div>
+</body>
+</html>
