@@ -17,35 +17,38 @@
             <p class="card-description">
               Basic form layout
             </p>
-            <form class="forms-sample">
+            <form  class="forms-sample"action="#" th:action="@{/admin/CreateAccount}" th:object="${user}" method="POST">
+
               <div class="form-group">
-                <label for="Name">Name</label>
-                <input type="text" class="form-control" id="Name" placeholder="Name">
+                <label for="name">Name</label>
+                <input class="form-control" type="text" th:field="*{name}" id="name"/>
+                <span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
               </div>
               <div class="form-group">
-                <label for="Username">Username</label>
-                <input type="text" class="form-control" id="Username" placeholder="Username">
+                <label for="username">Username</label>
+                <input class="form-control" type="text" th:field="*{username}" id="username"/>
+                <span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
               </div>
               <div class="form-group">
-                <label for="Email">Email address</label>
-                <input type="email" class="form-control" id="Email" placeholder="Email">
+                <label for="email">Email address</label>
+                <input class="form-control" type="text" th:field="*{email}" id="email"/>
+                <span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
               </div>
               <div class="form-group">
                 <label for="roles">Roles</label>
-                <select multiple class="form-control" id="roles" name="roles">
-                  <option value="1">ADMIN</option>
-                  <option value="2">EMPLOYEE</option>
+                <select class="form-control" id="roles" name="role.id">
 
+
+                  <option value="">---Role List---</option>
+                  <option th:each=" role : ${roles}"  th:value="${role}" th:text="${role.name}" ></option>
                 </select>
               </div>
               <div class="form-group">
-                <label for="Password">Password</label>
-                <input type="password" class="form-control" id="Password" placeholder="Password">
+                <label for="password">Password</label>
+                <input class="form-control" type="text" th:field="*{password}" id="password"/>
+                <span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
               </div>
-              <div class="form-group">
-                <label for="ConfirmPassword">Confirm Password</label>
-                <input type="password" class="form-control" id="ConfirmPassword"  >
-              </div>
+
 
               <button type="submit" class="btn btn-primary me-2">Submit</button>
               <button class="btn btn-light">Cancel</button>
@@ -56,6 +59,7 @@
 
     </div>
 
+</div>
 </div>
 </body>
 </html>

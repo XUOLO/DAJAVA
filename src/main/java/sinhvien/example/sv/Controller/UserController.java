@@ -24,7 +24,10 @@ public class UserController {
     public  String index (){
         return "User/layout";
     }
-
+    @GetMapping("ticket")
+    public  String ticket (){
+        return "User/ticket";
+    }
     @GetMapping("contact")
     public  String contact (){
         return "User/Contact";
@@ -34,9 +37,12 @@ public class UserController {
         return "User/about";
     }
     @GetMapping("service")
-    public  String Service (){
+    public  String service (){
         return "User/Service";
     }
 
-
+    @GetMapping("chat")
+    public  String chat (){
+        return "User/chat";
+    }
 }
