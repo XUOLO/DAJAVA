@@ -3,7 +3,7 @@
       layout:decorate="~{Admin/layout}">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>List Request</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <script>
@@ -39,7 +39,117 @@
     width: 205%;
     -webkit-flex-grow: 1;
     flex-grow: 1;" >
+<style>
+  <style>
+  td form {
+    display: inline-block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
 
+  td form select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #333;
+    cursor: pointer;
+    display: block;
+    font-size: 14px;
+    font-weight: 400;
+    height: 34px;
+    line-height: 1.42857143;
+    padding: 6px 12px;
+    width: 100%;
+  }
+
+  td form select:focus {
+    outline: none;
+    box-shadow: none;
+    border-color: #66afe9;
+  }
+
+  td form select option:disabled {
+    color: #999;
+  }
+
+  td form select option.active {
+    background-color: #007bff;
+    color: #fff;
+  }
+
+  td form button[type="submit"] {
+    display: none;
+  }
+
+  td form .dropdown {
+    display: inline-block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  td form .dropdown .btn-secondary {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #333;
+    cursor: pointer;
+    display: block;
+    font-size: 14px;
+    font-weight: 400;
+    height: 34px;
+    line-height: 1.42857143;
+    padding: 6px 12px;
+    width: 100%;
+    text-align: left;
+  }
+
+  td form .dropdown .btn-secondary:focus {
+    outline: none;
+    box-shadow: none;
+    border-color: #66afe9;
+  }
+
+  td form .dropdown .dropdown-menu {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: none;
+    color: #333;
+    display: none;
+    font-size: 14px;
+    font-weight: 400;
+    left: 0;
+    margin-top: 0;
+    min-width: 100%;
+    padding: 6px 0;
+    position: absolute;
+    top: 100%;
+    z-index: 9999;
+  }
+
+  td form .dropdown .dropdown-menu a {
+    color: #333;
+    display: block;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    margin: 0;
+    padding: 6px 12px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  td form .dropdown .dropdown-menu a:hover, td form .dropdown .dropdown-menu a.active {
+    background-color: #007bff;
+    color: #fff;
+  }
+</style>
+</style>
     <div class="col-lg-6 grid-margin stretch-card">
       <div class="card">
         <div class="card-body">
@@ -72,18 +182,19 @@
 
 
                 <td th:text="${ticket.department?.name}" style=""></td>
-                <td th:text="${ticket.statusString}">Status</td>
+                <td th:text="${ticket.statusString}" th:style="${ticket.status == '1' ? 'color: green' : ticket.status == '2' ? 'color: orange' : ticket.status == '3' ? 'color: blue' : 'color: black'}">Status</td>
 
 
 
                 <td>
                   <form method="POST" th:object="${ticket}" th:action="@{/admin/{id}/updateStatus(id=${ticket.id})}">
-                    <select name="status">
-                      <option value="1" th:selected="${ticket.status == '1'}">Open</option>
+                    <div th:if="${ticket.status == '3'}">Resolved</div>
+                    <select name="status" th:if="${ticket.status != '3'}" onchange="submit()">
+                      <option value="1" th:selected="${ticket.status == '1'}" th:disabled="${ticket.status == '2'}">Open</option>
                       <option value="2" th:selected="${ticket.status == '2'}">In Progress</option>
                       <option value="3" th:selected="${ticket.status == '3'}">Resolved</option>
                     </select>
-                    <button type="submit">Update</button>
+                    <input type="hidden" name="status" value="3" th:if="${ticket.status == '3'}" />
                   </form>
                 </td>
               </tbody>
