@@ -151,6 +151,16 @@ public String viewRequest(Model model) {
         return "Admin/listRequest";
 
     }
+
+    @PostMapping("/{id}/updateStatus")
+    public String updateTicketStatus(@PathVariable("id") Long id, @RequestParam("status") String status) {
+        Ticket ticket = ticketRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid ticket id: " + id));
+        ticket.setStatus(status);
+        ticketRepository.save(ticket);
+        return "redirect:/admin/listRequest";
+    }
+
+
 //    @PostMapping("/tickets/{id}/status")
 //    public ResponseEntity<Void> updateTicketStatus(@PathVariable("id") Long id, @RequestBody Map<String, String> request) {
 //        Ticket ticket = ticketService.getTicketById(id);

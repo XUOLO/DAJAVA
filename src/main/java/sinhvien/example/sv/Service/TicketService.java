@@ -43,8 +43,9 @@ public class TicketService {
     public List<Ticket> getTicketsForUser(Long userId) {
         return ticketRepository.findByUserId(userId);
     }
-    public Optional<Ticket> findById(Long id) {
-        return ticketRepository.findById(id);
+
+    public Ticket findById(Long id) {
+        return ticketRepository.findById(id).orElse(null);
     }
     public Page<Ticket> findPaginatedRequest(int pageNo, int pageSize){
         Pageable pageable= PageRequest.of(pageNo - 1,pageSize);

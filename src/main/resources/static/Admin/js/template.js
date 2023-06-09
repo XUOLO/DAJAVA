@@ -136,7 +136,7 @@
       document.querySelector('.page-body-wrapper').classList.add('proBanner-padding-top');
       document.querySelector('.navbar').classList.remove('mt-3');
       var date = new Date();
-      date.setTime(date.getTime() + 24 * 60 * 60 * 1000); 
+      date.setTime(date.getTime() + 24 * 60 * 60 * 1000);
       $.cookie('staradmin2-free-banner', "true", { expires: date });
     });
   });

@@ -4,13 +4,39 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script>
+ $(document).ready(function() {
+  function showUpdateForm(ticketId) {
+   console.log('showUpdateForm() called with ticketId:', ticketId);
+  document.getElementById("ticketId").value = ticketId;
+  document.getElementById("updateForm").style.display = "block";
+  }});
+</script>
+  <div th:inline="javascript">
+    $(document).ready(function() {
+    function showUpdateForm(ticketId) {
+    console.log('showUpdateForm() called with ticketId:', ticketId);
+    document.getElementById("ticketId").value = ticketId;
+    document.getElementById("updateForm").style.display = "block";
+    }
+    });
+  </div>
+  <script src="/js/ticket.js"></script>
+  <!-- Đường dẫn đến tệp CSS của Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+  <!-- Đường dẫn đến thư viện JavaScript của Bootstrap -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
 </head>
 <body>
 
 <div layout:fragment="main-panel"class="main-panel">
-  <div class="content-wrapper" style="  background: #F4F5F7;
+  <div class="content-wrapper" style="  background: #F4F5F7;margin-left:-47px;
     padding: 1.5rem 2.187rem 1.5rem 3.5rem;
-    width: 195%;
+    width: 205%;
     -webkit-flex-grow: 1;
     flex-grow: 1;" >
 
@@ -50,11 +76,16 @@
 
 
 
-
                 <td>
-                  <a >View</a>
-
-                  <button class="btn btn-primary" th:data-id="${ticket.id}" data-toggle="modal" data-target="#updateTicketStatusModal">Update</button>
+                  <form method="POST" th:object="${ticket}" th:action="@{/admin/{id}/updateStatus(id=${ticket.id})}">
+                    <select name="status">
+                      <option value="1" th:selected="${ticket.status == '1'}">Open</option>
+                      <option value="2" th:selected="${ticket.status == '2'}">In Progress</option>
+                      <option value="3" th:selected="${ticket.status == '3'}">Resolved</option>
+                    </select>
+                    <button type="submit">Update</button>
+                  </form>
+                </td>
               </tbody>
             </table>
 
@@ -91,9 +122,6 @@
 
 </div>
 <!-- Modal -->
-
-
-
 
 
 </body>
