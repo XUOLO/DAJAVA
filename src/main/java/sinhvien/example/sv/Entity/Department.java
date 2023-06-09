@@ -13,15 +13,24 @@ public class Department {
     private Long id;
 
     private String name;
+    private String mail;
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
 
     private String description;
 
     @OneToMany(mappedBy = "department")
     private List<Chat> chats;
 
-    @OneToMany(mappedBy = "department")
-    private List<Ticket> tickets;
 
+    @OneToMany(mappedBy = "department", cascade =  CascadeType.ALL)
+    private List<Ticket> tickets;
     // getters and setters
 
     public Long getId() {

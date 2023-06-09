@@ -13,5 +13,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     List<Ticket> findByUserAndDepartment(User user, Department department);
 
-    List<Ticket> findByStatus(Ticket.TicketStatus status);
+//    List<Ticket> findByStatus(Ticket.TicketStatus status);
+    List<Ticket> findByUserId(Long userId);
 }

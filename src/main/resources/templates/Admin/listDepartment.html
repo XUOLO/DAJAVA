@@ -10,7 +10,7 @@
 <div layout:fragment="main-panel"class="main-panel">
   <div class="content-wrapper" style="  background: #F4F5F7;
     padding: 1.5rem 2.187rem 1.5rem 3.5rem;
-    width: 180%;
+    width: 195%;
     -webkit-flex-grow: 1;
     flex-grow: 1;" >
 
@@ -27,9 +27,10 @@
               <tr>
 
                 <th>No.</th>
-                <th>Description</th>
                 <th>Name</th>
 
+                <th>Email</th>
+                <th>Description</th>
                 <th>Action</th>
               </tr>
               </thead>
@@ -37,8 +38,10 @@
 
               <tr th:each="department, i : ${listDepartment}">
                 <td th:text="${i.index + 1}"></td>
-                <td th:text="${department.description}">Description</td>
                 <td th:text="${department.name}">Name</td>
+                <td th:text="${department.mail}">Email</td>
+                <td th:text="${department.description}">Description</td>
+
 
 
                 <td>

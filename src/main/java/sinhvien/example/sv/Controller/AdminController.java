@@ -3,16 +3,22 @@ package sinhvien.example.sv.Controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sinhvien.example.sv.Entity.Department;
 import sinhvien.example.sv.Entity.Role;
+import sinhvien.example.sv.Entity.Ticket;
 import sinhvien.example.sv.Entity.User;
+import sinhvien.example.sv.Repository.TicketRepository;
 import sinhvien.example.sv.Service.DepartmentService;
 import sinhvien.example.sv.Service.RoleService;
+import sinhvien.example.sv.Service.TicketService;
 import sinhvien.example.sv.Service.UserService;
 
 
@@ -21,14 +27,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
     @Autowired
+    private TicketRepository ticketRepository;
+    @Autowired
     private DataSource dataSource;
+    @Autowired
+    private TicketService ticketService;
     @Autowired
     private RoleService roleService;
     @Autowired
@@ -101,13 +114,8 @@ public class AdminController {
             model.addAttribute("department", department);
             return "Admin/EditDepartment";
         }
-        Department existingDepartment = departmentService.getDepartmentById(id);
-        if (existingDepartment == null) {
-            throw new RuntimeException("Department not found with id: " + id);
-        }
-        existingDepartment.setName(department.getName());
-        existingDepartment.setDescription(department.getDescription());
-        departmentService.saveDepartment(existingDepartment);
+
+        departmentService.saveDepartment(department);
         return "redirect:/admin/listDepartment";
     }
 
@@ -123,6 +131,42 @@ public class AdminController {
         return "redirect:/admin/listDepartment";
     }
 
+//////ListRequest
+@GetMapping("/listRequest")
+public String viewRequest(Model model) {
+
+
+    return findPaginatedRequest(1,model);
+}
+    @GetMapping("/pageTicket/{pageNo}")
+    public String findPaginatedRequest(@PathVariable(value = "pageNo")int pageNo,Model model){
+        int pageSize=5;
+        Page<Ticket> page= ticketService.findPaginatedRequest(pageNo,pageSize);
+        List<Ticket> ticketList = page.getContent();
+
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages",page.getTotalPages());
+        model.addAttribute("totalItems",page.getTotalElements());
+        model.addAttribute("listTicket",ticketList);
+        return "Admin/listRequest";
+
+    }
+//    @PostMapping("/tickets/{id}/status")
+//    public ResponseEntity<Void> updateTicketStatus(@PathVariable("id") Long id, @RequestBody Map<String, String> request) {
+//        Ticket ticket = ticketService.getTicketById(id);
+//        if (ticket == null) {
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//        try {
+//            Ticket.TicketStatus newStatus = Ticket.TicketStatus.valueOf(request.get("status"));
+//            ticket.setStatus(newStatus);
+//            ticketService.saveTicket(ticket);
+//            return ResponseEntity.ok().build();
+//        } catch (IllegalArgumentException ex) {
+//            return ResponseEntity.badRequest().build();
+//        }
+//    }
 
 
 

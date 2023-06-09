@@ -1,6 +1,8 @@
 package sinhvien.example.sv.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
@@ -12,31 +14,86 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    @Column(name = "name",length = 250,nullable = false)
+    @Size(max = 250, message = "name must be less than 250 character")
+    @NotBlank(message = "Your name is required")
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Column(name = "subject",length = 250,nullable = false)
+    @Size(max = 250, message = "subject must be less than 250 character")
+    @NotBlank(message = "Your subject is required")
     private String subject;
 
-    private String description;
+    @Column(name = "message",length = 500,nullable = false)
+    @Size(max = 500, message = "message must be less than 500 character")
+    @NotBlank(message = "Your message is required")
+    private String message;
 
-    private LocalDateTime createTime;
+    @Column(name = "email",length = 150,nullable = false)
+    @Size(max = 150, message = "Email must be less than 150 character")
+    @NotBlank(message = "Your email is required")
+    private String email;
+    private String phone;
 
     private LocalDateTime updateTime;
+    private LocalDateTime createTime;
 
-    @Enumerated(EnumType.STRING)
-    private TicketStatus status;
-    public enum TicketStatus {
-        OPEN,
-        IN_PROGRESS,
-        RESOLVED,
-        CLOSED
+    public void setStatus(String status) {
+        this.status = status;
     }
-    @ManyToOne
+    public String getStatusString() {
+        switch (status) {
+            case "1":
+                return "Open";
+            case "2":
+                return "In Progress";
+            case "3":
+                return "Resolved";
+            default:
+                return "Unknown";
+        }
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    private String status;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "department_id")
     private Department department;
 
     // getters and setters
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getSubject() {
         return subject;
@@ -46,12 +103,12 @@ public class Ticket {
         this.subject = subject;
     }
 
-    public String getDescription() {
-        return description;
+    public String getMessage() {
+        return message;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public Long getId() {
@@ -78,13 +135,7 @@ public class Ticket {
         this.updateTime = updateTime;
     }
 
-    public TicketStatus getStatus() {
-        return status;
-    }
 
-    public void setStatus(TicketStatus status) {
-        this.status = status;
-    }
 
     public User getUser() {
         return user;

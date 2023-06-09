@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+       layout:decorate="~{User/Layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<header  style="background-color:#000;" layout:fragment="header" class="header navbar-fixed-top">
+  <nav class="navbar"   role="navigation">
+    <div class="container">
+      <div class="menu-container js_nav-item">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="toggle-icon"></span>
+        </button>
+
+        <div class="logo">
+          <a class="logo-wrap" href="#body">
+            <img class="logo-img logo-img-main" src="img/logo.png" alt="FlameOnePage Logo">
+            <img class="logo-img logo-img-active" src="img/logo-dark.png" alt="FlameOnePage Dark Logo">
+          </a>
+        </div>
+      </div>
+
+      <div class="collapse navbar-collapse nav-collapse">
+
+        <!--div class="language-switcher">
+          <ul class="nav-lang">
+            <li><a class="active" href="#">EN</a></li>
+            <li><a href="#">DE</a></li>
+            <li><a href="#">FR</a></li>
+          </ul>
+        </div--->
+
+        <div class="menu-container">
+          <ul class="nav navbar-nav navbar-nav-right">
+            <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users">Home</a></li>
+            <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users/about">About</a></li>
+            <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users">Services</a></li>
+            <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="#">Submit a tickets</a></li>
+            <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users/ticket">My ticket</a></li>
+            <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users/chat">Chat</a></li>
+            <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users/contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div id="carousel-example-generic" layout:fragment="carousel-example-generic"class="carousel slide" data-ride="carousel">
+
+</div>
+<div layout:fragment="SubmitTicket"id="SubmitTicket" style="    padding-top: 125px; padding-left: 100px;   padding-right: 80px;">
+<h1 style="text-align: center;"> Submit a request </h1>
+  <p style="text-align:center;">From tech to tilt, we're here to help you!
+    <br/>
+    Submit a Ticket! So long as it doesn't fall through a portal, we'll get back to you soon.</p>
+  <div th:if="${successMessage}" class="alert alert-success">
+    <p style="text-align:center;" th:text="${successMessage}"></p>
+  </div>
+
+
+  <form  class="forms-sample"  th:action="@{/users/SubmitTicket}" th:object="${ticket}" method="POST">
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input class="form-control" type="text" th:field="*{name}" id="name"/>
+      <span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+    </div>
+    <div class="form-group">
+      <label for="phone">Phone:</label>
+
+
+      <input   type="text" th:field="*{phone}" id="phone" required class="form-control" autocomplete="off"
+             pattern="(03|05|07|08|09)[0-9]{8}"
+             oninvalid="this.setCustomValidity('Phone numbers must start with  03, 05, 07, 08 or 09 and have exactly 10 digits')"
+             onchange="this.setCustomValidity('')" onkeypress="return valideNumber()"   />
+      <span class="text-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
+    </div>
+    <div class="form-group">
+      <label for="subject">Subject:</label>
+      <input class="form-control" type="text" th:field="*{subject}" id="subject"/>
+      <span class="text-danger" th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}"></span>
+    </div>
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input class="form-control" type="text" th:field="*{email}" id="email"/>
+      <span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+    </div>
+
+
+    <div class="form-group">
+      <label>CHOOSE A REQUEST TYPE:</label>
+      <select class="form-control" th:field="*{department.id}">
+        <option value="">---REQUEST TYPE---</option>
+        <option th:each="department : ${listDepartments}" th:value="${department.id}" th:text="${department.description}"></option>
+
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="message">Content to support:</label>
+
+      <textarea class="form-control" th:field="*{message}"  id="message" name="message" rows="5" required></textarea>
+      <span class="text-danger" th:if="${#fields.hasErrors('message')}" th:errors="*{message}"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+<div  layout:fragment="services"id="services">
+
+</div>
+<script>
+
+    function valideNumber() {
+        var charCode = (event.which) ? event.which : event.keyCode;
+        if (charCode >= 48 && charCode <= 57) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+            function validPhoneNumber(event) {
+                // Chỉ nhận các giá trị số và phím xoá
+                if (event.charCode >= 48 && event.charCode <= 57 || event.keyCode === 8) {
+                    var phoneNumberInputs = document.getElementsByName('Phone');
+                    for (var i = 0; i < phoneNumberInputs.length; i++) {
+                        var phoneNumber = phoneNumberInputs[i].value;
+                        // Số điện thoại của Việt Nam có độ dài là 10 và bắt đầu từ số 0
+                        if (phoneNumber.length < 10 || phoneNumber.charAt(0) !== '0') {
+                            phoneNumberInputs[i].setCustomValidity('Phone numbers must start with 0 and be 10 digits long;
+                        } else {
+                            phoneNumberInputs[i].setCustomValidity('');
+                        }
+                    }
+                    return true;
+                } else {
+                    event.preventDefault();
+                    return false;
+                }
+$(document).ready(function() {
+    $('#submitTicketForm').submit(function (event) {
+        event.preventDefault();
+        $.ajax({
+            url: "/users/ticket",
+            type: "POST",
+            data: $(this).serialize(),
+            success: function (data) {
+                $('#successMessage').show();
+            }
+        });
+    });
+});
+        </script>
+</body>
+</html>
