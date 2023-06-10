@@ -18,12 +18,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    @Column(name = "username",length = 50,nullable = false,unique = true)
+    @Column(name = "username", length = 50, nullable = false, unique = true)
     @NotBlank(message = "Username is required")
-    @Size(max=50,message = "Username must be less than 50 character")
-    private  String username;
+    @Size(max = 50, message = "Username must be less than 50 character")
+    private String username;
 
-    @Column(name = "password",length = 250,nullable = false)
+    @Column(name = "password", length = 250, nullable = false)
     @NotBlank(message = "Password is required")
     private String password;
 
@@ -67,24 +67,50 @@ public class User {
         this.name = name;
     }
 
-//    public List<Book> getBooks() {
-//        return books;
-//    }
-//
-//    public void setBooks(List<Book> books) {
-//        this.books = books;
-//    }
 
-    @Column(name = "email",length = 50,nullable = false)
+    @Column(name = "email", length = 50, nullable = false)
     @Size(max = 50, message = "Email must be less than 50 character")
     @NotBlank(message = "Your email is required")
     private String email;
+    @Column(name = "phone", length = 50, nullable = false)
+    @Size(max = 50, message = "phone must be less than 50 character")
+    @NotBlank(message = "Your phone is required")
+    private String phone;
+    @Column(name = "address", length = 50, nullable = false)
+    @Size(max = 50, message = "address must be less than 50 character")
+    @NotBlank(message = "Your address is required")
+    private String address;
 
-    @Column(name = "name",length = 50,nullable = false)
+    @Column(name = "name", length = 50, nullable = false)
     @Size(max = 50, message = "Your name must be less than 50 character")
     @NotBlank(message = "Your name is required")
     private String name;
     private String role;
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    private String salt;
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public String getRole() {
         return role;
@@ -105,7 +131,7 @@ public class User {
 //    private List<Book> books= new ArrayList<>();
 
     @ManyToMany
-    @JoinTable(name = "user_role",joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "user")

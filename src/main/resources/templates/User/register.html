@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Login</title>
-  <th:block th:replace="~{layout :: link-css}"></th:block>
+
 </head>
 <body>
-<th:block th:replace="~{layout :: header}"></th:block>
+
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-lg-6 col-md-8">
@@ -28,6 +28,16 @@
           <span class="text-danger" th:if="${#fields.hasErrors('username')}"th:error="*{username}" ></span>
         </div>
         <div class="mb-3">
+          <label for="phone" class="form-label">Phone:</label><span class="text-danger">*</span>
+          <input th:type="text"   class="form-control" th:field="*{phone}"id="phone"  >
+          <span class="text-danger" th:if="${#fields.hasErrors('phone')}"th:error="*{phone}" ></span>
+        </div>
+        <div class="mb-3">
+          <label for="address" class="form-label">Address:</label><span class="text-danger">*</span>
+          <input th:type="text"   class="form-control" th:field="*{address}"id="address"  >
+          <span class="text-danger" th:if="${#fields.hasErrors('address')}"th:error="*{address}" ></span>
+        </div>
+        <div class="mb-3">
           <label for="password" class="form-label">Password:</label><span class="text-danger">*</span>
           <input th:type="password"   class="form-control" th:field="*{password}"id="password"  >
           <span class="text-danger" th:if="${#fields.hasErrors('password')}"th:error="*{password}" ></span>
@@ -39,6 +49,6 @@
     </div>
   </div>
 </div>
-<th:block th:replace="~{layout :: footer}"></th:block>
+
 </body>
 </html>

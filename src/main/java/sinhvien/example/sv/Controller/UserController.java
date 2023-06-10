@@ -3,6 +3,7 @@ package sinhvien.example.sv.Controller;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +13,13 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sinhvien.example.sv.Entity.Department;
 import sinhvien.example.sv.Entity.Role;
 import sinhvien.example.sv.Entity.Ticket;
 import sinhvien.example.sv.Entity.User;
+import sinhvien.example.sv.Security.PasswordUtils;
 import sinhvien.example.sv.Service.DepartmentService;
 import sinhvien.example.sv.Service.TicketService;
 import sinhvien.example.sv.Service.UserService;
@@ -32,7 +31,7 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping({"/users","/"})
+@RequestMapping({"/users", "/"})
 public class UserController {
     @Autowired
     private JavaMailSender mailSender;
@@ -42,43 +41,51 @@ public class UserController {
     private TicketService ticketService;
     @Autowired
     private UserService userService;
+
     @GetMapping("")
-    public  String index (){
+    public String index(HttpSession session, Model model) {
+        List<Department> departmentList = departmentService.GetAllDepartment();
+        model.addAttribute("departmentList", departmentList);
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser != null) {
+            String name = sessionUser.getName();
+            model.addAttribute("name", name);
+        }
+        model.addAttribute("user", sessionUser);
         return "User/layout";
     }
 
 
     @GetMapping("contact")
-    public  String contact (){
+    public String contact() {
         return "User/Contact";
     }
+
     @GetMapping("about")
-    public  String about (){
+    public String about() {
         return "User/about";
     }
+
     @GetMapping("service")
-    public  String service (){
+    public String service() {
         return "User/Service";
     }
 
     @GetMapping("chat")
-    public  String chat (){
+    public String chat() {
         return "User/chat";
     }
 
 
 
 
+    @GetMapping("/MyTicket")
+    public String showTicketsForUser(Model model ) {
 
 
-    @GetMapping("/listTickets")
-    public String showTicketsForUser(Model model, Principal principal) {
-        String username = principal.getName();
-        User currentUser = userService.findUserByUsername(username);
-        List<Ticket> tickets = ticketService.getTicketsForUser(currentUser.getId());
-        model.addAttribute("tickets", tickets);
         return "User/MyTicket";
     }
+
     @GetMapping("/SubmitTicket")
     public String sendTicketForm(Model model) {
         List<Department> departments = departmentService.GetAllDepartment();
@@ -87,9 +94,9 @@ public class UserController {
 
         return "User/SubmitTicket";
     }
+
     @PostMapping("/SubmitTicket")
-    public String sendTicket(@Valid @ModelAttribute("ticket") Ticket ticket, HttpServletRequest request, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws MessagingException {
-        if (bindingResult.hasErrors()) {
+    public String sendTicket(@Valid @ModelAttribute("ticket") Ticket ticket, HttpSession session, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws MessagingException {       if (bindingResult.hasErrors()) {
             model.addAttribute("ticket", ticket);
             model.addAttribute("listDepartments", departmentService.GetAllDepartment());
             return "users/ticket";
@@ -97,6 +104,10 @@ public class UserController {
 
         ticket.setCreateTime(LocalDateTime.now());
         ticket.setStatus("1");
+
+        Long userId = (Long) session.getAttribute("userId");
+        User user = userService.getUser(userId);
+        ticket.setUser(user);
         ticketService.saveTicket(ticket);
 
         redirectAttributes.addFlashAttribute("successMessage", "Ticket has been submitted successfully! Please check your mail.");
@@ -134,29 +145,68 @@ public class UserController {
             mailSender.send(departmentMimeMessage); // Gửi email cho phòng ban được chọn
         }
 
-        return "redirect:/users/ticket";
+        return "redirect:/users/SubmitTicket";
     }
 
+
+
+
+
+
+
+    //Login register
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new User());
-        return "user/registration";
+        return "User/register";
     }
 
+
+
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute("user") User user, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "registration";
+    public String registerUser(@ModelAttribute("user") @Valid User user, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "User/register";
         }
+
+        String salt = PasswordUtils.getSalt(30);
+        String hashedPassword = PasswordUtils.generateSecurePassword(user.getPassword(), salt);
+
+        user.setSalt(salt);
+        user.setPassword(hashedPassword);
         userService.saveUser(user);
-        return "redirect:/user/login";
+
+        return "redirect:/Users/login";
     }
+
 
     @GetMapping("/login")
     public String showLoginForm() {
         return "user/login";
     }
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/users";
+    }
+    @PostMapping("/login")
+    public String login(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession session, Model model) {
+        User user = userService.findUserByUsername(username);
 
+        if (user == null) {
+            model.addAttribute("error", "Invalid username or password");
+            return "user/login";
+        }
 
+        String hashedPassword = PasswordUtils.generateSecurePassword(password, user.getSalt());
+
+        if (!user.getPassword().equals(hashedPassword)) {
+            model.addAttribute("error", "Invalid username or password");
+            return "user/login";
+        }
+        session.setAttribute("userId", user.getId());
+        session.setAttribute("user", user);
+        return "redirect:/users";
+    }
 
 }

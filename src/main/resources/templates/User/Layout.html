@@ -17,12 +17,15 @@
     <link href="vendor/swiper/css/swiper.min.css" rel="stylesheet" type="text/css"/>
     <link href="css/layout.min.css" rel="stylesheet" type="text/css"/>
     <link rel="shortcut icon" href="favicon.ico"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
 </head>
 
 
 <body id="body" data-spy="scroll" data-target=".header">
 
-<header  layout:fragment="header" class="header navbar-fixed-top">
+<header layout:fragment="header" class="header navbar-fixed-top">
     <nav class="navbar" role="navigation">
         <div class="container">
             <div class="menu-container js_nav-item">
@@ -48,16 +51,45 @@
                     <li><a href="#">FR</a></li>
                   </ul>
                 </div--->
+                <style>
+    .header .navbar {
+    margin-left: -160px;}
+    ul.nav.navbar-nav.navbar-nav-right {
+    margin-right: -85px;
+}
 
+
+
+                </style>
                 <div class="menu-container">
                     <ul class="nav navbar-nav navbar-nav-right">
-                        <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users">Home</a></li>
-                        <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users/about">About</a></li>
-                        <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users">Services</a></li>
-                        <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users/SubmitTicket">Submit a tickets</a></li>
-                        <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users/MyTicket">My ticket</a></li>
-                        <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users/chat">Chat</a></li>
-                        <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users/contact">Contact</a></li>
+                        <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users">Home</a>
+                        </li>
+                        <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users/about">About</a>
+                        </li>
+                        <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover"
+                                                            href="/users">Services</a></li>
+                        <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover"
+                                                            href="/users/SubmitTicket">Submit a tickets</a></li>
+                        <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover"
+                                                            th:href="${session.user == null ? 'users/login' : 'users/MyTicket'}">My
+                            ticket</a></li>
+                        <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users/chat">Chat</a>
+                        </li>
+                        <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users/contact">Contact</a>
+                        </li>
+                        <li class="js_nav-item nav-item">
+                            <a class="nav-item-child nav-item-hover" th:if="${session.user == null}"
+                               href="/users/login">Login</a>
+                        </li>
+                        <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover"
+                                                            th:if="${session.user != null}">Hi, [[${name}]]!</a>
+                        </li>
+                        <li class="js_nav-item nav-item">
+                            <a class="nav-item-child nav-item-hover" th:if="${session.user != null}"
+                               href="/users/logout">Logout</a>
+                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -65,7 +97,8 @@
     </nav>
 </header>
 
-<div id="carousel-example-generic" layout:fragment="carousel-example-generic"class="carousel slide" data-ride="carousel">
+<div id="carousel-example-generic" layout:fragment="carousel-example-generic" class="carousel slide"
+     data-ride="carousel">
     <div class="container">
         <ol class="carousel-indicators">
             <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
@@ -80,7 +113,9 @@
                 <div class="carousel-centered">
                     <div class="margin-b-40">
                         <h1 class="carousel-title">Hi-End Solutions</h1>
-                        <p class="color-white">We will quickly receive and process your request, and find a way to solve the problem quickly and efficiently.   <br/> We will notify you of the results as soon as possible.</p>
+                        <p class="color-white">We will quickly receive and process your request, and find a way to solve
+                            the problem quickly and efficiently. <br/> We will notify you of the results as soon as
+                            possible.</p>
                     </div>
                     <a href="#" class="btn-theme btn-theme-sm btn-white-brd text-uppercase">Details</a>
                 </div>
@@ -92,7 +127,8 @@
                 <div class="carousel-centered">
                     <div class="margin-b-40">
                         <h2 class="carousel-title">Personal Approach</h2>
-                        <p class="color-white">From tech to tilt, we're here to help you! <br/> So long as it doesn't fall through a portal, we'll get back to you soon.</p>
+                        <p class="color-white">From tech to tilt, we're here to help you! <br/> So long as it doesn't
+                            fall through a portal, we'll get back to you soon.</p>
 
                     </div>
                     <a href="#" class="btn-theme btn-theme-sm btn-white-brd text-uppercase">Submit a ticket</a>
@@ -105,114 +141,65 @@
 
 <!--========== PAGE LAYOUT ==========-->
 <!-- About -->
-<div layout:fragment="about"id="about">
+<div layout:fragment="about">
 
 </div>
 <!-- End About -->
 
 
-
-
 <!-- Services -->
-<div  layout:fragment="services"id="services">
+<div layout:fragment="services">
     <div class="bg-color-sky-light" data-auto-height="true">
         <div class="content-lg container">
             <div class="row margin-b-40">
                 <div class="col-sm-6">
                     <h2>Services</h2>
-                    <p>We offer a range of customized services to help businesses succeed. Our team of experts delivers exceptional results with a focus on quality and innovation. Contact us for more information.</p>
-                 </div>
-            </div>
-            <!--// end row -->
-            <div class="row row-space-1 margin-b-2">
-                <div class="col-sm-4 sm-margin-b-2">
-                    <div class="service" data-height="height">
-                        <div class="service-element">
-                            <i class="service-icon icon-phone"></i>
-                        </div>
-                        <div class="service-info">
-                            <h3>Customer Support</h3>
-                            <p class="margin-b-5">Our team is available 24/7 to assist you with any questions or concerns.</p>
-                        </div>
-                        <a href="#" class="content-wrapper-link"></a>
-                    </div>
-                </div>
-                <div class="col-sm-4 sm-margin-b-2">
-                    <div class="service bg-color-base" data-height="height">
-                        <div class="service-element">
-                            <i class="service-icon color-white icon-cog"></i>
-                        </div>
-                        <div class="service-info">
-                            <h3 class="color-white">Technical Support</h3>
-                            <p class="color-white margin-b-5">Our experts are available to help you resolve any technical issues.</p>
-                        </div>
-                        <a href="#" class="content-wrapper-link"></a>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="service" data-height="height">
-                        <div class="service-element">
-                            <i class="service-icon icon-chat"></i>
-                        </div>
-                        <div class="service-info">
-                            <h3>Live Chat</h3>
-                            <p class="margin-b-5">Connect with our support team instantly via live chat for quick assistance.</p>
-                        </div>
-                        <a href="#" class="content-wrapper-link"></a>
-                    </div>
+                    <p>We offer a range of customized services to help businesses succeed. Our team of experts delivers
+                        exceptional results with a focus on quality and innovation. Contact us for more information.</p>
                 </div>
             </div>
             <!--// end row -->
 
+            <!--// end row -->
+
             <div class="row row-space-1">
-                <div class="col-sm-4 sm-margin-b-2">
+
+                <div th:each="department, i : ${departmentList}" class="col-sm-4 sm-margin-b-2">
                     <div class="service" data-height="height">
                         <div class="service-element">
-                            <i class="service-icon icon-info"></i>
+
+                            <i class="service-icon fa-solid fa-users"
+                               th:if="${department.name == 'Customer Support'}"></i>
+                            <i class="service-icon fa-solid fa-headset"
+                               th:if="${department.name == 'Chat Support'}"></i>
+                            <i class="service-icon icon-credit-card"
+                               th:if="${department.name == 'Billing Support'}"></i>
+                            <i class="service-icon icon-chemistry" th:if="${department.name == 'User Management'}"></i>
+                            <i class="service-icon icon-notebook" th:if="${department.name == 'Customer Care'}"></i>
+                            <i class="service-icon fa-sharp fa-solid fa-gears"
+                               th:if="${department.name == 'Technical Support'}"></i>
+
                         </div>
                         <div class="service-info">
-                            <h3>Product Information</h3>
-                            <p class="margin-b-5">Learn more about our products and services with detailed information and resources.</p>
+                            <h3 th:text="${department.name}">Name</h3>
+                            <p th:text="${department.description}" class="margin-b-5"> description</p>
                         </div>
                         <a href="#" class="content-wrapper-link"></a>
                     </div>
                 </div>
-                <div class="col-sm-4 sm-margin-b-2">
-                    <div class="service" data-height="height">
-                        <div class="service-element">
-                            <i class="service-icon icon-credit-card"></i>
-                        </div>
-                        <div class="service-info">
-                            <h3>Billing Support</h3>
-                            <p class="margin-b-5">Our billing team is available to assist you with any questions or concerns regarding your account.</p>
-                        </div>
-                        <a href="#" class="content-wrapper-link"></a>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="service" data-height="height">
-                        <div class="service-element">
-                            <i class="service-icon icon-shield"></i>
-                        </div>
-                        <div class="service-info">
-                            <h3>Security</h3>
-                            <p class="margin-b-5">We take security seriously and offer various measures to protect your data and privacy.</p>
-                        </div>
-                        <a href="#" class="content-wrapper-link"></a>
-                    </div>
-                </div>
+
             </div>
             <!--// end row -->
         </div>
     </div>
 </div>
 <!-- End Service -->
-<div layout:fragment="SubmitTicket"id="SubmitTicket">
+<div layout:fragment="SubmitTicket">
     <!-- Contact List -->
 
 </div>
 <!-- Contact -->
-<div layout:fragment="contact"id="contact">
+<div layout:fragment="contact">
     <!-- Contact List -->
 
 </div>
@@ -267,7 +254,8 @@
                 <img class="footer-logo" src="img/logo-dark.png" alt="flameonepage Logo">
             </div>
             <div class="col-xs-6 text-right">
-                <p class="margin-b-0"><a class="fweight-700" href="#">FlameOnePage</a> Theme Powered by: <a class="fweight-700" href="http://ft-seo.ch/">FairTech Studio</a></p>
+                <p class="margin-b-0"><a class="fweight-700" href="#">FlameOnePage</a> Theme Powered by: <a
+                        class="fweight-700" href="http://ft-seo.ch/">FairTech Studio</a></p>
             </div>
         </div>
         <!--// end row -->
