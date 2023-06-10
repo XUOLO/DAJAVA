@@ -225,33 +225,35 @@ public class UserController {
 
 
     @PostMapping("/change-password")
-    public void changePassword(@RequestParam("username") String username,
-                               @RequestParam("currentPassword") String currentPassword,
-                               @RequestParam("newPassword") String newPassword) {
-        // Kiểm tra dữ liệu đầu vào
-        if (username == null || currentPassword == null || newPassword == null) {
-            throw new IllegalArgumentException("Missing required parameter");
+    public String changePassword(HttpSession session,
+                                 @RequestParam("currentPassword") String currentPassword,
+                                 @RequestParam("newPassword") String newPassword,
+                                 @RequestParam("confirmPassword") String confirmPassword,
+                                 RedirectAttributes redirectAttributes) {
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser != null) {
+            // Kiểm tra mật khẩu hiện tại của người dùng
+            String hashedPassword = PasswordUtils.generateSecurePassword(currentPassword, sessionUser.getSalt());
+            if (!hashedPassword.equals(sessionUser.getPassword())) {
+                redirectAttributes.addFlashAttribute("errorPass", "Incorrect current password.");
+                return "redirect:/accountInfo";
+            }
+
+            // Kiểm tra tính hợp lệ của mật khẩu mới
+            if (!newPassword.equals(confirmPassword)) {
+                redirectAttributes.addFlashAttribute("errorPass", "New passwords do not match.");
+                return "redirect:/accountInfo";
+            }
+
+            // Lưu mật khẩu mới của người dùng vào cơ sở dữ liệu
+            String newSalt = PasswordUtils.getSalt(30);
+            String newHashedPassword = PasswordUtils.generateSecurePassword(newPassword, newSalt);
+            sessionUser.setSalt(newSalt);
+            sessionUser.setPassword(newHashedPassword);
+            userService.saveUser(sessionUser);
+            redirectAttributes.addFlashAttribute("successPass", "Password changed successfully.");
         }
-
-        // Lấy salt của người dùng từ cơ sở dữ liệu
-        String salt = userService.getSaltByUsername(username);
-
-        if (salt == null) {
-            throw new RuntimeException("User not found");
-        }
-
-        // Mã hóa mật khẩu hiện tại để so sánh với mật khẩu trong cơ sở dữ liệu
-        String currentPasswordHash = PasswordUtils.generateSecurePassword(currentPassword, salt);
-        String savedPasswordHash = userService.getPasswordByUsername(username);
-
-        if (!currentPasswordHash.equals(savedPasswordHash)) {
-            throw new RuntimeException("Current password is incorrect");
-        }
-
-        // Tạo mật khẩu mới và lưu vào cơ sở dữ liệu
-        String newSalt = PasswordUtils.getSalt(16);
-        String newPasswordHash = PasswordUtils.generateSecurePassword(newPassword, newSalt);
-        userService.updatePassword(username, newPasswordHash, newSalt);
+        return "redirect:/accountInfo";
     }
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
