@@ -57,22 +57,42 @@ public class UserController {
 
 
     @GetMapping("contact")
-    public String contact() {
+    public String contact(HttpSession session,Model model) {
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser != null) {
+            String name = sessionUser.getName();
+            model.addAttribute("name", name);
+        }
         return "User/Contact";
     }
 
     @GetMapping("about")
-    public String about() {
+    public String about(HttpSession session,Model model) {
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser != null) {
+            String name = sessionUser.getName();
+            model.addAttribute("name", name);
+        }
         return "User/about";
     }
 
     @GetMapping("service")
-    public String service() {
+    public String service(HttpSession session,Model model) {
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser != null) {
+            String name = sessionUser.getName();
+            model.addAttribute("name", name);
+        }
         return "User/Service";
     }
 
     @GetMapping("chat")
-    public String chat() {
+    public String chat(HttpSession session,Model model) {
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser != null) {
+            String name = sessionUser.getName();
+            model.addAttribute("name", name);
+        }
         return "User/chat";
     }
 
@@ -80,18 +100,26 @@ public class UserController {
 
 
     @GetMapping("/MyTicket")
-    public String showTicketsForUser(Model model ) {
-
+    public String showTicketsForUser(HttpSession session,Model model ) {
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser != null) {
+            String name = sessionUser.getName();
+            model.addAttribute("name", name);
+        }
 
         return "User/MyTicket";
     }
 
     @GetMapping("/SubmitTicket")
-    public String sendTicketForm(Model model) {
+    public String sendTicketForm(HttpSession session,Model model) {
         List<Department> departments = departmentService.GetAllDepartment();
         model.addAttribute("ticket", new Ticket());
         model.addAttribute("listDepartments", departments);
-
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser != null) {
+            String name = sessionUser.getName();
+            model.addAttribute("name", name);
+        }
         return "User/SubmitTicket";
     }
 
@@ -169,14 +197,31 @@ public class UserController {
             return "User/register";
         }
 
+        // Check if user already exists
+        User existingUser = userService.findUserByUsernameOrEmail(user.getUsername(), user.getEmail());
+        if (existingUser != null) {
+            if (existingUser.getUsername().equals(user.getUsername())) {
+                result.rejectValue("username", "error.user", "This username is already taken");
+            } else {
+                result.rejectValue("email", "error.user", "This email is already registered");
+            }
+            return "User/register";
+        }
+
         String salt = PasswordUtils.getSalt(30);
         String hashedPassword = PasswordUtils.generateSecurePassword(user.getPassword(), salt);
 
         user.setSalt(salt);
         user.setPassword(hashedPassword);
         userService.saveUser(user);
-
-        return "redirect:/Users/login";
+        if (existingUser != null) {
+            if (existingUser.getUsername().equals(user.getUsername())) {
+                result.rejectValue("username", "error.user", "This username is already taken");
+            } else {
+                result.rejectValue("email", "error.user", "This email is already registered");
+            }
+        }
+        return "redirect:/users/login";
     }
 
 

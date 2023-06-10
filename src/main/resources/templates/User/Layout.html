@@ -59,8 +59,19 @@
 }
 
 
-
                 </style>
+
+                <script>
+function showDropdown(li) {
+   var dropdown = li.querySelector('.dropdown-menu');
+   dropdown.classList.add('show');
+}
+
+function hideDropdown(li) {
+   var dropdown = li.querySelector('.dropdown-menu');
+   dropdown.classList.remove('show');
+}
+</script>
                 <div class="menu-container">
                     <ul class="nav navbar-nav navbar-nav-right">
                         <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users">Home</a>
@@ -70,7 +81,8 @@
                         <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover"
                                                             href="/users">Services</a></li>
                         <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover"
-                                                            href="/users/SubmitTicket">Submit a tickets</a></li>
+                                                            th:href="${session.user == null ? 'users/login' : 'users/SubmitTicket'}">Submit a ticket
+                             </a></li>
                         <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover"
                                                             th:href="${session.user == null ? 'users/login' : 'users/MyTicket'}">My
                             ticket</a></li>
@@ -82,13 +94,15 @@
                             <a class="nav-item-child nav-item-hover" th:if="${session.user == null}"
                                href="/users/login">Login</a>
                         </li>
-                        <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover"
-                                                            th:if="${session.user != null}">Hi, [[${name}]]!</a>
+                        <li class="js_nav-item nav-item dropdown" onmouseover="showDropdown(this)" onmouseout="hideDropdown(this)">
+                            <a class="nav-item-child nav-item-hover dropdown-toggle" href="#"th:if="${session.user != null}">Hi, [[${name}]]!</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Account information</a></li>
+                                <li><a class="dropdown-item" th:if="${session.user != null}"
+                                       href="/users/logout">Logout</a></li>
+                            </ul>
                         </li>
-                        <li class="js_nav-item nav-item">
-                            <a class="nav-item-child nav-item-hover" th:if="${session.user != null}"
-                               href="/users/logout">Logout</a>
-                        </li>
+
 
                     </ul>
                 </div>

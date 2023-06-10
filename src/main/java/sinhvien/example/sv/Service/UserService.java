@@ -5,6 +5,8 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import sinhvien.example.sv.Entity.Role;
 import sinhvien.example.sv.Entity.User;
@@ -23,8 +25,8 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
-    public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public User findUserByUsernameOrEmail(String username, String email) {
+        return userRepository.findByUsernameOrEmail(username, email);
     }
 
     public List<User> getUsersByRole(Role role) {
