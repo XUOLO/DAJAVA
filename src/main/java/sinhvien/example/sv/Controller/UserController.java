@@ -55,7 +55,46 @@ public class UserController {
         return "User/layout";
     }
 
+    @GetMapping("/accountInfo")
+    public String accountInfo(HttpSession session,Model model) {
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser != null) {
+            String name = sessionUser.getName();
+            String email = sessionUser.getEmail();
+            String phone = sessionUser.getPhone();
+            String address = sessionUser.getAddress();
+            model.addAttribute("name", name);
+            model.addAttribute("email", email);
+            model.addAttribute("phone", phone);
+            model.addAttribute("address", address);
 
+        }
+        return "User/AccountInfo";
+    }
+
+
+    @PostMapping("/update-user-info")
+    public String updateUserInfo(HttpSession session,
+                                 @RequestParam("email") String email,
+                                 @RequestParam("phone") String phone,
+                                 @RequestParam("address") String address,
+                                 RedirectAttributes redirectAttributes) {
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser != null) {
+            User userByEmail = userService.findByEmail(email);
+            if (userByEmail != null && !userByEmail.getId().equals(sessionUser.getId())) {
+                // email đã tồn tại trong cơ sở dữ liệu và không phải của user hiện tại
+                redirectAttributes.addFlashAttribute("error", "Email already exists.");
+            } else {
+                sessionUser.setEmail(email);
+                sessionUser.setPhone(phone);
+                sessionUser.setAddress(address);
+                userService.saveUser(sessionUser); // cập nhật thông tin của user trong cơ sở dữ liệu
+                redirectAttributes.addFlashAttribute("success", "User info updated successfully.");
+            }
+        }
+        return "redirect:/users/accountInfo"; // chuyển hướng người dùng đến trang khác
+    }
     @GetMapping("contact")
     public String contact(HttpSession session,Model model) {
         User sessionUser = (User) session.getAttribute("user");
@@ -183,6 +222,37 @@ public class UserController {
 
 
     //Login register
+
+
+    @PostMapping("/change-password")
+    public void changePassword(@RequestParam("username") String username,
+                               @RequestParam("currentPassword") String currentPassword,
+                               @RequestParam("newPassword") String newPassword) {
+        // Kiểm tra dữ liệu đầu vào
+        if (username == null || currentPassword == null || newPassword == null) {
+            throw new IllegalArgumentException("Missing required parameter");
+        }
+
+        // Lấy salt của người dùng từ cơ sở dữ liệu
+        String salt = userService.getSaltByUsername(username);
+
+        if (salt == null) {
+            throw new RuntimeException("User not found");
+        }
+
+        // Mã hóa mật khẩu hiện tại để so sánh với mật khẩu trong cơ sở dữ liệu
+        String currentPasswordHash = PasswordUtils.generateSecurePassword(currentPassword, salt);
+        String savedPasswordHash = userService.getPasswordByUsername(username);
+
+        if (!currentPasswordHash.equals(savedPasswordHash)) {
+            throw new RuntimeException("Current password is incorrect");
+        }
+
+        // Tạo mật khẩu mới và lưu vào cơ sở dữ liệu
+        String newSalt = PasswordUtils.getSalt(16);
+        String newPasswordHash = PasswordUtils.generateSecurePassword(newPassword, newSalt);
+        userService.updatePassword(username, newPasswordHash, newSalt);
+    }
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new User());

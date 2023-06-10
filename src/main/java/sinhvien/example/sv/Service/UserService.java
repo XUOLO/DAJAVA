@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import sinhvien.example.sv.Entity.Role;
 import sinhvien.example.sv.Entity.User;
@@ -28,6 +29,10 @@ public class UserService {
     public User findUserByUsernameOrEmail(String username, String email) {
         return userRepository.findByUsernameOrEmail(username, email);
     }
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
 
     public List<User> getUsersByRole(Role role) {
         return userRepository.findByRoles(role);
@@ -55,5 +60,20 @@ public class UserService {
     }
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    public String getPasswordByUsername(String username) {
+        String sql = "SELECT password_hash FROM users WHERE username = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{username}, String.class);
+    }
+
+    public String getSaltByUsername(String username) {
+        String sql = "SELECT salt FROM users WHERE username = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{username}, String.class);
+    }
+    public void updatePassword(String username, String newPasswordHash, String newSalt) {
+        String sql = "UPDATE users SET password_hash = ?, salt = ? WHERE username = ?";
+        jdbcTemplate.update(sql, newPasswordHash, newSalt, username);
     }
 }
