@@ -37,15 +37,18 @@
                                         <td th:text="${user.id}"> ID</td>
                                         <td th:text="${user.name}">Name</td>
                                         <td th:text="${user.email}">Email</td>
-                                        <td th:text="${user.role}" ></td>
+                                        <td th:text="${user.name}">
 
+                                        </td>
                                         <td>
                                             <a th:href="@{'/admin/edit/' + ${user.id}}">Edit</a>
                                             &nbsp;&nbsp;&nbsp;
                                             <a th:href="@{'/admin/delete/' + ${user.id}}" onclick="return confirm('Are you sure?')">Delete</a>
-
                                         </td>
                                     </tr>
+
+
+
 
                                     </tbody>
                                 </table>

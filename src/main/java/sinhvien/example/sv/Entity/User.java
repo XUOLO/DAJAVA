@@ -85,7 +85,7 @@ public class User {
     @Size(max = 50, message = "Your name must be less than 50 character")
     @NotBlank(message = "Your name is required")
     private String name;
-    private String role;
+
 
     public String getSalt() {
         return salt;
@@ -112,13 +112,6 @@ public class User {
         this.address = address;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 
     public Set<Role> getRoles() {
         return roles;
@@ -127,11 +120,10 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-//    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-//    private List<Book> books= new ArrayList<>();
 
     @ManyToMany
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "user")

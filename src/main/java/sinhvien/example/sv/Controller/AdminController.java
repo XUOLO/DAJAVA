@@ -1,5 +1,7 @@
 package sinhvien.example.sv.Controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,7 @@ import sinhvien.example.sv.Entity.Role;
 import sinhvien.example.sv.Entity.Ticket;
 import sinhvien.example.sv.Entity.User;
 import sinhvien.example.sv.Repository.TicketRepository;
+import sinhvien.example.sv.Repository.UserRepository;
 import sinhvien.example.sv.Service.DepartmentService;
 import sinhvien.example.sv.Service.RoleService;
 import sinhvien.example.sv.Service.TicketService;
@@ -109,12 +112,11 @@ public class AdminController {
     }
 
     @PostMapping("/EditDepartment/{id}")
-    public String updateDepartment(@PathVariable("id") Long id, @Valid @ModelAttribute("department") Department department, BindingResult bindingResult, Model model) {
+    public String EditDepartment(@PathVariable("id") Long id, @Valid @ModelAttribute("department") Department department, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("department", department);
             return "Admin/EditDepartment";
         }
-
         departmentService.saveDepartment(department);
         return "redirect:/admin/listDepartment";
     }
@@ -143,7 +145,6 @@ public String viewRequest(Model model) {
         int pageSize=5;
         Page<Ticket> page= ticketService.findPaginatedRequest(pageNo,pageSize);
         List<Ticket> ticketList = page.getContent();
-
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages",page.getTotalPages());
         model.addAttribute("totalItems",page.getTotalElements());
@@ -153,12 +154,30 @@ public String viewRequest(Model model) {
     }
 
     @PostMapping("/{id}/updateStatus")
-    public String updateTicketStatus(@PathVariable("id") Long id, @RequestParam("status") String status) {
+    public String updateTicketStatus(@PathVariable("id") Long id, @RequestParam("status") String status, HttpServletRequest request) {
         Ticket ticket = ticketRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid ticket id: " + id));
         ticket.setStatus(status);
         ticketRepository.save(ticket);
-        return "redirect:/admin/listRequest";
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
     }
+
+//    @PostMapping("/ListRequest/search")
+//    public String searchTicket(@ModelAttribute("ticket") Ticket ticket, @RequestParam String keyword, Model model) {
+//        if (ticket != null) {
+//            List<Ticket> tickets = ticketService.searchTickets(ticket.getId(), keyword);
+//            if (tickets.isEmpty()) { // Nếu không tìm thấy bất kỳ ticket nào khớp với từ khóa tìm kiếm
+//                String errorMessage = "No matching tickets found";
+//                model.addAttribute("errorMessage", errorMessage);
+//            } else {
+//                model.addAttribute("tickets", tickets);
+//            }
+//            model.addAttribute("name", ticket.getName());
+//            return "/User/MyTicket";
+//        }
+//        saiiiiiiiiiiiiiiii
+//        return "redirect:/login";
+//    }
 
 
 //    @PostMapping("/tickets/{id}/status")
@@ -181,6 +200,7 @@ public String viewRequest(Model model) {
 
 
     ///Account
+
     @GetMapping("/CreateAccount")
     public String addBookForm(Model model) {
         List<Role> roles = roleService.getAllRole();

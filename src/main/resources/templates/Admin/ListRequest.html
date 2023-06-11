@@ -40,7 +40,36 @@
     -webkit-flex-grow: 1;
     flex-grow: 1;" >
 <style>
-  <style>
+
+.search-form {
+  display: inline-block; /* hiển thị form search trên cùng 1 dòng với các phần tử khác */
+  position: relative; /* set vị trí của form search thành relative để có thể hiển thị icon search */
+}
+
+.icon-search {
+  position: absolute; /* set vị trí của icon search để đặt nó trong form search */
+  top: 50%; /* đặt icon search ở giữa theo chiều dọc */
+  left: 10px; /* đặt icon search ở gần cạnh trái */
+  transform: translateY(-50%); /* đưa icon search lên trên 1 chút để canh giữa theo chiều ngang */
+  color: #999; /* set màu sắc của icon search */
+}
+
+.form-control {
+  display: inline-block; /* set hiển thị của input search thành inline-block */
+  width: 200px; /* đặt chiều rộng của input search */
+  border: none; /* loại bỏ viền của input search */
+  border-bottom: 1px solid #999; /* đặt viền ở dưới input search */
+  padding-left: 30px; /* để tránh bị che mất icon search thì ta đặt lề trái của input search */
+}
+
+.form-control:focus {
+  outline: none;
+}
+
+.form-control::placeholder {
+  color: #999;
+}
+
   td form {
     display: inline-block;
     width: 100%;
@@ -154,6 +183,10 @@
       <div class="card">
         <div class="card-body">
           <h4 class="card-title">List request</h4>
+          <form class="search-form" action="#">
+            <i class="icon-search"></i>
+            <input type="search" class="form-control" placeholder="Search Here" title="Search here">
+          </form>
           <p class="card-description">
 
           </p>

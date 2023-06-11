@@ -46,19 +46,20 @@ public class TicketService {
     }
 
 
-    public List<Ticket> searchTicketsBySubject(Long userId, String subject) {
+    public List<Ticket> searchTickets(Long userId, String keyword) {
         List<Ticket> tickets = ticketRepository.findByUserId(userId); // Lấy danh sách tất cả các ticket của user
-        List<Ticket> matchedTickets = new ArrayList<>(); // Tạo danh sách rỗng để lưu các ticket khớp với tiêu đề tìm kiếm
+        List<Ticket> matchedTickets = new ArrayList<>(); // Tạo danh sách rỗng để lưu các ticket khớp với từ khóa tìm kiếm
 
-        // Duyệt qua danh sách các ticket của user để tìm các ticket khớp với tiêu đề tìm kiếm
+        // Duyệt qua danh sách các ticket của user để tìm các ticket khớp với từ khóa tìm kiếm
         for (Ticket ticket : tickets) {
-            if (ticket.getSubject().contains(subject)) { // Nếu tiêu đề của ticket cần tìm kiếm có chứa chuỗi tìm kiếm
+            if (ticket.getSubject().contains(keyword) || ticket.getPhone().contains(keyword) || ticket.getId().toString().contains(keyword)) { // Nếu ticket chứa từ khóa tìm kiếm
                 matchedTickets.add(ticket); // Thêm ticket vào danh sách các ticket khớp
             }
         }
 
-        return matchedTickets; // Trả về danh sách các ticket khớp với tiêu đề tìm kiếm
+        return matchedTickets; // Trả về danh sách các ticket khớp với từ khóa tìm kiếm
     }
+
 
     public Ticket findById(Long id) {
         return ticketRepository.findById(id).orElse(null);

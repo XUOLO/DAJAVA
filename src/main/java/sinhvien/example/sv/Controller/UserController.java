@@ -77,10 +77,10 @@ public class UserController {
     }
 
     @PostMapping("/MyTicket/search")
-    public String searchTicketBySubject(HttpSession session, @RequestParam String subject, Model model) {
+    public String searchTicket(HttpSession session, @RequestParam String keyword, Model model) {
         User sessionUser = (User) session.getAttribute("user");
         if (sessionUser != null) {
-            List<Ticket> tickets = ticketService.searchTicketsBySubject(sessionUser.getId(), subject);
+            List<Ticket> tickets = ticketService.searchTickets(sessionUser.getId(), keyword);
             if (tickets.isEmpty()) { // Nếu không tìm thấy bất kỳ ticket nào khớp với từ khóa tìm kiếm
                 String errorMessage = "No matching tickets found";
                 model.addAttribute("errorMessage", errorMessage);
@@ -88,10 +88,11 @@ public class UserController {
                 model.addAttribute("tickets", tickets);
             }
         }
-
+        String name = sessionUser.getName();
+        model.addAttribute("name", name);
         return "/User/MyTicket";
-
     }
+
 
 
     @GetMapping("/accountInfo")
