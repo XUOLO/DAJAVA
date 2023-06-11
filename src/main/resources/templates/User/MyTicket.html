@@ -142,13 +142,27 @@ function hideDropdown(li) {
 }
 </style>
   <h1>My Tickets</h1>
+
+  <form method="post" action="/users/MyTicket/search">
+    <div class="form-group">
+      <label>Search subject:</label>
+      <input type="text" class="form-control" name="subject" placeholder="Subject.....">
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+  </form>
+
+  <div th:if="${errorMessage}" class="alert alert-danger">
+    <p th:text="${errorMessage}"></p>
+  </div>
+
+
   <table>
     <thead>
     <tr>
       <th>Ticket ID</th>
       <th>Name</th>
       <th>Email</th>
-      <th>Ticket description</th>
+      <th>Subject</th>
       <th>Create date</th>
       <th>Department support</th>
       <th>Status</th>
@@ -160,7 +174,7 @@ function hideDropdown(li) {
       <td th:text="${ticket.user.name}"></td>
 
       <td th:text="${ticket.email}">Email</td>
-      <td th:text="${ticket.department.description}">Description</td>
+      <td th:text="${ticket.subject}">Subject</td>
       <td th:text="${#temporals.format(ticket.createTime, 'dd/MM/yyyy')}">Create date</td>
 
 

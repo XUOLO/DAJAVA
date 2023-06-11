@@ -10,6 +10,7 @@ import sinhvien.example.sv.Entity.Ticket;
 import sinhvien.example.sv.Entity.User;
 import sinhvien.example.sv.Repository.TicketRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +43,21 @@ public class TicketService {
 
     public List<Ticket> getTicketsForUser(Long userId) {
         return ticketRepository.findByUserId(userId);
+    }
+
+
+    public List<Ticket> searchTicketsBySubject(Long userId, String subject) {
+        List<Ticket> tickets = ticketRepository.findByUserId(userId); // Lấy danh sách tất cả các ticket của user
+        List<Ticket> matchedTickets = new ArrayList<>(); // Tạo danh sách rỗng để lưu các ticket khớp với tiêu đề tìm kiếm
+
+        // Duyệt qua danh sách các ticket của user để tìm các ticket khớp với tiêu đề tìm kiếm
+        for (Ticket ticket : tickets) {
+            if (ticket.getSubject().contains(subject)) { // Nếu tiêu đề của ticket cần tìm kiếm có chứa chuỗi tìm kiếm
+                matchedTickets.add(ticket); // Thêm ticket vào danh sách các ticket khớp
+            }
+        }
+
+        return matchedTickets; // Trả về danh sách các ticket khớp với tiêu đề tìm kiếm
     }
 
     public Ticket findById(Long id) {

@@ -1,5 +1,6 @@
 package sinhvien.example.sv.Controller;
 
+import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
@@ -74,6 +75,25 @@ public class UserController {
 
         return "User/MyTicket";
     }
+
+    @PostMapping("/MyTicket/search")
+    public String searchTicketBySubject(HttpSession session, @RequestParam String subject, Model model) {
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser != null) {
+            List<Ticket> tickets = ticketService.searchTicketsBySubject(sessionUser.getId(), subject);
+            if (tickets.isEmpty()) { // Nếu không tìm thấy bất kỳ ticket nào khớp với từ khóa tìm kiếm
+                String errorMessage = "No matching tickets found";
+                model.addAttribute("errorMessage", errorMessage);
+            } else {
+                model.addAttribute("tickets", tickets);
+            }
+        }
+
+        return "/User/MyTicket";
+
+    }
+
+
     @GetMapping("/accountInfo")
     public String accountInfo(HttpSession session,Model model) {
         User sessionUser = (User) session.getAttribute("user");
@@ -114,6 +134,11 @@ public class UserController {
         }
         return "redirect:/users/accountInfo"; // chuyển hướng người dùng đến trang khác
     }
+
+
+
+
+
     @GetMapping("contact")
     public String contact(HttpSession session,Model model) {
         User sessionUser = (User) session.getAttribute("user");
