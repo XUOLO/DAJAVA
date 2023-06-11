@@ -80,7 +80,7 @@ function hideDropdown(li) {
                         <li class="js_nav-item nav-item dropdown" onmouseover="showDropdown(this)" onmouseout="hideDropdown(this)">
                             <a class="nav-item-child nav-item-hover dropdown-toggle" href="#"th:if="${session.user != null}">Hi, [[${name}]]!</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Account information</a></li>
+                                <li><a class="dropdown-item" href="/users/accountInfo">Account information</a></li>
                                 <li><a class="dropdown-item" th:if="${session.user != null}"
                                        href="/users/logout">Logout</a></li>
                             </ul>
@@ -121,7 +121,7 @@ function hideDropdown(li) {
             <div class="row">
                 <!-- Contact List -->
                 <div class="col-sm-4 sm-margin-b-50">
-                    <h3><a href="http://ft-seo.ch/">Loc1</a> <span class="text-uppercase margin-l-20">Human Resources</span></h3>
+                    <h3><a href="#">Loc1</a> <span class="text-uppercase margin-l-20">Human Resources</span></h3>
                     <p> We provide customized human resources solutions to help businesses attract, retain, and develop top talent. Let us help you achieve your goals.</p>                    <ul class="list-unstyled contact-list">
                         <li><i class="margin-r-10 color-base icon-call-out"></i> 123456789</li>
                         <li><i class="margin-r-10 color-base icon-envelope"></i> gmail@gmail.com</li>
@@ -131,7 +131,7 @@ function hideDropdown(li) {
 
                 <!-- Contact List -->
                 <div class="col-sm-4 sm-margin-b-50">
-                    <h3><a href="http://ft-seo.ch/">Loc2</a> <span class="text-uppercase margin-l-20">Development</span></h3>
+                    <h3><a href="#">Loc2</a> <span class="text-uppercase margin-l-20">Development</span></h3>
                     <p>     We offer custom development solutions to help businesses grow and thrive. Let us turn your ideas into reality.  </p>
                     <ul class="list-unstyled contact-list">
                         <li><i class="margin-r-10 color-base icon-call-out"></i> 123456789</li>
@@ -142,7 +142,7 @@ function hideDropdown(li) {
 
                 <!-- Contact List -->
                 <div class="col-sm-4 sm-margin-b-50">
-                    <h3><a href="http://ft-seo.ch/">Loc3</a> <span class="text-uppercase margin-l-20">CEO</span></h3>
+                    <h3><a href="#">Loc3</a> <span class="text-uppercase margin-l-20">CEO</span></h3>
                     <p>As CEO of our company, I am committed to helping businesses reach their full potential through innovative solutions and exceptional service. Contact us to learn how we can help you.
                     <ul class="list-unstyled contact-list">
                         <li><i class="margin-r-10 color-base icon-call-out"></i> 123456789</li>

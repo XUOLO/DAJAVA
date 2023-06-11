@@ -54,7 +54,26 @@ public class UserController {
         model.addAttribute("user", sessionUser);
         return "User/layout";
     }
+    @GetMapping("/MyTicket")
+    public String showTicketsForUser(HttpSession session,Model model ) {
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser != null) {
+            String name = sessionUser.getName();
+            String email = sessionUser.getEmail();
+            String phone = sessionUser.getPhone();
+            String address = sessionUser.getAddress();
+// Call to backend service to retrieve all tickets for the user
+            List<Ticket> tickets = ticketService.getTicketsForUser(sessionUser.getId());
+            model.addAttribute("tickets", tickets);
+            model.addAttribute("name", name);
+            model.addAttribute("email", email);
+            model.addAttribute("phone", phone);
+            model.addAttribute("address", address);
 
+        }
+
+        return "User/MyTicket";
+    }
     @GetMapping("/accountInfo")
     public String accountInfo(HttpSession session,Model model) {
         User sessionUser = (User) session.getAttribute("user");
@@ -138,16 +157,7 @@ public class UserController {
 
 
 
-    @GetMapping("/MyTicket")
-    public String showTicketsForUser(HttpSession session,Model model ) {
-        User sessionUser = (User) session.getAttribute("user");
-        if (sessionUser != null) {
-            String name = sessionUser.getName();
-            model.addAttribute("name", name);
-        }
 
-        return "User/MyTicket";
-    }
 
     @GetMapping("/SubmitTicket")
     public String sendTicketForm(HttpSession session,Model model) {

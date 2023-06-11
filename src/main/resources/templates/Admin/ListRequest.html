@@ -163,6 +163,7 @@
               <tr>
 
                 <th>No.</th>
+                <th>Ticket ID</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Create date</th>
@@ -175,6 +176,7 @@
 
               <tr th:each="ticket, i : ${listTicket}">
                 <td th:text="${i.index + 1}"></td>
+                <td th:text="${ticket.id}">Ticket Id</td>
                 <td th:text="${ticket.name}">Name</td>
                 <td th:text="${ticket.email}">Email</td>
 

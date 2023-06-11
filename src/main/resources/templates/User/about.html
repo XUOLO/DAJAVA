@@ -79,7 +79,7 @@ function hideDropdown(li) {
             <li class="js_nav-item nav-item dropdown" onmouseover="showDropdown(this)" onmouseout="hideDropdown(this)">
               <a class="nav-item-child nav-item-hover dropdown-toggle" href="#"th:if="${session.user != null}">Hi, [[${name}]]!</a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Account information</a></li>
+                <li><a class="dropdown-item" href="/users/accountInfo">Account information</a></li>
                 <li><a class="dropdown-item" th:if="${session.user != null}"
                        href="/users/logout">Logout</a></li>
               </ul>
