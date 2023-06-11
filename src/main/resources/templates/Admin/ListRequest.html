@@ -183,10 +183,15 @@
       <div class="card">
         <div class="card-body">
           <h4 class="card-title">List request</h4>
-          <form class="search-form" action="#">
-            <i class="icon-search"></i>
-            <input type="search" class="form-control" placeholder="Search Here" title="Search here">
+
+          <form method="post" action="/admin/ListRequest/search">
+
+            <input type="search" name="keyword" class="form-control" placeholder="Search Here" title="Search here">
+<!--            <button type="submit">Search</button>-->
           </form>
+          <div th:if="${errorMessage}" class="alert alert-danger">
+            <p th:text="${errorMessage}"></p>
+          </div>
           <p class="card-description">
 
           </p>
@@ -198,7 +203,7 @@
                 <th>No.</th>
                 <th>Ticket ID</th>
                 <th>Name</th>
-                <th>Email</th>
+                <th>Subject</th>
                 <th>Create date</th>
                 <th>Department</th>
                 <th>Status</th>
@@ -211,7 +216,7 @@
                 <td th:text="${i.index + 1}"></td>
                 <td th:text="${ticket.id}">Ticket Id</td>
                 <td th:text="${ticket.name}">Name</td>
-                <td th:text="${ticket.email}">Email</td>
+                <td th:text="${ticket.subject}">Subject</td>
 
                 <td th:text="${#temporals.format(ticket.createTime, 'dd/MM/yyyy')}">Create date</td>
 

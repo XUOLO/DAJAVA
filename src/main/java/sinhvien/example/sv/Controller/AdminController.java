@@ -162,24 +162,25 @@ public String viewRequest(Model model) {
         return "redirect:" + referer;
     }
 
-//    @PostMapping("/ListRequest/search")
-//    public String searchTicket(@ModelAttribute("ticket") Ticket ticket, @RequestParam String keyword, Model model) {
-//        if (ticket != null) {
-//            List<Ticket> tickets = ticketService.searchTickets(ticket.getId(), keyword);
-//            if (tickets.isEmpty()) { // Nếu không tìm thấy bất kỳ ticket nào khớp với từ khóa tìm kiếm
-//                String errorMessage = "No matching tickets found";
-//                model.addAttribute("errorMessage", errorMessage);
-//            } else {
-//                model.addAttribute("tickets", tickets);
-//            }
-//            model.addAttribute("name", ticket.getName());
-//            return "/User/MyTicket";
-//        }
-//        saiiiiiiiiiiiiiiii
-//        return "redirect:/login";
+    @PostMapping("/ListRequest/search")
+    public String searchTicket(@RequestParam("keyword") String keyword, Model model ) {
+        List<Ticket> tickets = ticketService.searchTicketAdmin(keyword);
+        if (tickets.isEmpty()) {
+            String errorMessage = "No matching tickets found";
+            model.addAttribute("errorMessage", errorMessage);
+        } else {
+            model.addAttribute("listTicket", tickets);
+        }
+
+
+        return "Admin/ListRequest"  ;
+    }
+
+
+//    @GetMapping("/ListRequest/search")
+//    public List<Ticket> searchTicketAdmin(@RequestParam("keyword") String keyword) {
+//        return ticketService.searchTicketAdmin(keyword);
 //    }
-
-
 //    @PostMapping("/tickets/{id}/status")
 //    public ResponseEntity<Void> updateTicketStatus(@PathVariable("id") Long id, @RequestBody Map<String, String> request) {
 //        Ticket ticket = ticketService.getTicketById(id);

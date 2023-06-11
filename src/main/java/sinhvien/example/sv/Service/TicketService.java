@@ -45,7 +45,13 @@ public class TicketService {
         return ticketRepository.findByUserId(userId);
     }
 
+    public List<Ticket> searchTicketAdmin(String keyword) {
 
+        if(keyword!=null){
+                return ticketRepository.findAll(keyword);
+        }
+        return ticketRepository.findAll();
+    }
     public List<Ticket> searchTickets(Long userId, String keyword) {
         List<Ticket> tickets = ticketRepository.findByUserId(userId); // Lấy danh sách tất cả các ticket của user
         List<Ticket> matchedTickets = new ArrayList<>(); // Tạo danh sách rỗng để lưu các ticket khớp với từ khóa tìm kiếm
