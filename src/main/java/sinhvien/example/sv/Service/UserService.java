@@ -11,9 +11,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import sinhvien.example.sv.Entity.Role;
 import sinhvien.example.sv.Entity.User;
+import sinhvien.example.sv.Repository.RoleRepository;
 import sinhvien.example.sv.Repository.UserRepository;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -21,6 +25,9 @@ public class UserService {
     private EntityManager entityManager;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
+
 
     public User getUser(Long id) {
         return userRepository.findById(id).orElse(null);
@@ -33,15 +40,47 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-
+    
     public List<User> getUsersByRole(Role role) {
         return userRepository.findByRoles(role);
     }
 
     public void saveUser(User user) {
+
+        Set<Role> roles;
+
+        if(user.getRoles() != null) {
+            roles = user.getRoles();
+        } else {
+            roles = new HashSet<>();
+        }
+        Role customerRole = roleRepository.findByName("CUSTOMER");
+
+        roles.add(customerRole); // Gán vai trò CUSTOMER cho tài khoản đăng kí
+        user.setRoles(roles);
+
         userRepository.save(user);
     }
 
+
+    public User getUserById(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if(user.isPresent()) {
+            return user.get();
+        } else {
+            throw new RuntimeException("Không tìm thấy User với id = " + id);
+        }
+    }
+    public void updateUser(Long id, User user) {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy User với id là " + id));
+
+        existingUser.setName(user.getName());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setRoles(user.getRoles());
+
+        userRepository.save(existingUser);
+    }
     public List<User> GetAllUser(){
         return userRepository.findAll();
     }

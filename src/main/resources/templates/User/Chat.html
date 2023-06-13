@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Chat</title>
+
 </head>
 <body>
 <header  style="background-color:#000;" layout:fragment="header" class="header navbar-fixed-top">
@@ -97,6 +98,122 @@ function hideDropdown(li) {
 <div  layout:fragment="services"id="services">
 
 </div>
+<div  layout:fragment="chat"id="chat">
 
+  <section
+        style="background-position: center; background-image: url('../../Users/css/18.jpg');background-repeat: no-repeat; background-size: cover;">
+  <noscript>
+    <h2>Sorry! Your browser doesn't support Javascript</h2>
+  </noscript>
+
+  <div id="username-page">
+    <div class="username-page-container">
+      <h1 class="title">Type your username</h1>
+      <form id="usernameForm" name="usernameForm">
+        <div class="form-group">
+          <input type="text" id="name" placeholder="Username"
+                 autocomplete="off" class="form-control" />
+        </div>
+        <div class="form-group">
+          <button type="submit" class="accent username-submit">Start
+            Chatting</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="chat-page" class="hidden">
+    <div class="chat-container">
+      <div class="chat-header">
+        <h2>JavaTechie Global Chat Box</h2>
+      </div>
+      <div class="connecting">Connecting...</div>
+      <ul id="messageArea">
+        <div id="leave-message" style="display:none;">
+          <p><strong></strong> has left the chat.</p>
+        </div>
+      </ul>
+      <form id="messageForm" name="messageForm" nameForm="messageForm">
+        <div class="form-group">
+          <div class="input-group clearfix">
+            <input type="text" id="message" placeholder="Type a message..."
+                   autocomplete="off" class="form-control" />
+            <button type="submit" class="primary">Send</button>
+
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <link rel="stylesheet" href="../../Users/css/main.css" />
+  <script
+          src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+  <script
+          src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+  <script src="../../Users/css/main.js"></script>
+
+  </section>
+</div>
+<footer layout:fragment="footer"class="Chat">
+  <!-- Links -->
+
+  <style>
+    footer.Chat {
+    padding-top: 40%;
+}
+  </style>
+  <div class="section-seperator">
+    <div class="content-md container">
+      <div class="row">
+        <div class="col-sm-2 sm-margin-b-30">
+          <!-- List -->
+          <ul class="list-unstyled footer-list">
+            <li class="footer-list-item"><a href="#body">Home</a></li>
+            <li class="footer-list-item"><a href="#about">Team</a></li>
+            <li class="footer-list-item"><a href="#work">Credentials</a></li>
+            <li class="footer-list-item"><a href="#contact">Contact</a></li>
+          </ul>
+          <!-- End List -->
+        </div>
+        <div class="col-sm-2 sm-margin-b-30">
+          <!-- List -->
+          <ul class="list-unstyled footer-list">
+            <li class="footer-list-item"><a href="#">Twitter</a></li>
+            <li class="footer-list-item"><a href="#">Facebook</a></li>
+            <li class="footer-list-item"><a href="#">Instagram</a></li>
+            <li class="footer-list-item"><a href="#">YouTube</a></li>
+          </ul>
+          <!-- End List -->
+        </div>
+        <div class="col-sm-3">
+          <!-- List -->
+          <ul class="list-unstyled footer-list">
+            <li class="footer-list-item"><a href="#">Subscribe to Our Newsletter</a></li>
+            <li class="footer-list-item"><a href="#">Privacy Policy</a></li>
+            <li class="footer-list-item"><a href="#">Terms &amp; Conditions</a></li>
+          </ul>
+          <!-- End List -->
+        </div>
+      </div>
+      <!--// end row -->
+    </div>
+  </div>
+  <!-- End Links -->
+
+  <!-- Copyright -->
+  <div class="content container">
+    <div class="row">
+      <div class="col-xs-6">
+        <img class="footer-logo" src="../../../../../img/logo-dark.png" alt="flameonepage Logo">
+      </div>
+      <div class="col-xs-6 text-right">
+        <p class="margin-b-0"><a class="fweight-700" href="#">FlameOnePage</a> Theme Powered by: <a
+                class="fweight-700" href="http://ft-seo.ch/">FairTech Studio</a></p>
+      </div>
+    </div>
+    <!--// end row -->
+  </div>
+  <!-- End Copyright -->
+</footer>
 </body>
 </html>

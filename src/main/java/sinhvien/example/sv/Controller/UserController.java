@@ -27,8 +27,10 @@ import sinhvien.example.sv.Service.UserService;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 
 @Controller
@@ -47,14 +49,24 @@ public class UserController {
     public String index(HttpSession session, Model model) {
         List<Department> departmentList = departmentService.GetAllDepartment();
         model.addAttribute("departmentList", departmentList);
+
         User sessionUser = (User) session.getAttribute("user");
         if (sessionUser != null) {
             String name = sessionUser.getName();
+
+            // Tạo list roles để lưu tên các vai trò của người dùng đăng nhập
+            List<String> roles = new ArrayList<>();
+            for(Role role : sessionUser.getRoles()){
+                roles.add(role.getName());
+            }
+
             model.addAttribute("name", name);
+            model.addAttribute("roles", roles); // Đưa danh sách các vai trò vào model
         }
         model.addAttribute("user", sessionUser);
         return "User/layout";
     }
+
     @GetMapping("/MyTicket")
     public String showTicketsForUser(HttpSession session,Model model ) {
         User sessionUser = (User) session.getAttribute("user");
@@ -199,7 +211,8 @@ public class UserController {
     }
 
     @PostMapping("/SubmitTicket")
-    public String sendTicket(@Valid @ModelAttribute("ticket") Ticket ticket, HttpSession session, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws MessagingException {       if (bindingResult.hasErrors()) {
+    public String sendTicket(@Valid @ModelAttribute("ticket") Ticket ticket, HttpSession session, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws MessagingException {
+        if (bindingResult.hasErrors()) {
             model.addAttribute("ticket", ticket);
             model.addAttribute("listDepartments", departmentService.GetAllDepartment());
             return "users/ticket";

@@ -90,16 +90,28 @@ function hideDropdown(li) {
                         </li>
                         <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users/contact">Contact</a>
                         </li>
+
                         <li class="js_nav-item nav-item">
                             <a class="nav-item-child nav-item-hover" th:if="${session.user == null}"
                                href="/users/login">Login</a>
-                        </li>
+                         </li>
                         <li class="js_nav-item nav-item dropdown" onmouseover="showDropdown(this)" onmouseout="hideDropdown(this)">
-                            <a class="nav-item-child nav-item-hover dropdown-toggle" href="#"th:if="${session.user != null}">Hi, [[${name}]]!</a>
+                            <a class="nav-item-child nav-item-hover dropdown-toggle" href="#" th:if="${session.user != null}">
+                                Hi, [[${name}]]!, Roles:
+                                <span th:each="role : ${roles}">
+
+    <!-- Kiểm tra nếu role là Admin, và chỉ hiển thị nếu có -->
+    <span th:if="${role == 'ADMIN'}">
+      <span th:text="'Role: ' + ${role}"></span>
+    </span>
+
+  </span>
+                            </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="/users/accountInfo">Account information</a></li>
                                 <li><a class="dropdown-item" th:if="${session.user != null}"
                                        href="/users/logout">Logout</a></li>
+
                             </ul>
                         </li>
 
@@ -131,7 +143,7 @@ function hideDropdown(li) {
                             the problem quickly and efficiently. <br/> We will notify you of the results as soon as
                             possible.</p>
                     </div>
-                    <a href="#" class="btn-theme btn-theme-sm btn-white-brd text-uppercase">Details</a>
+                    <a href="users/about" class="btn-theme btn-theme-sm btn-white-brd text-uppercase">Details</a>
                 </div>
             </div>
         </div>
@@ -145,7 +157,8 @@ function hideDropdown(li) {
                             fall through a portal, we'll get back to you soon.</p>
 
                     </div>
-                    <a href="#" class="btn-theme btn-theme-sm btn-white-brd text-uppercase">Submit a ticket</a>
+                    <a  th:href="${session.user == null ? 'users/login' : 'users/SubmitTicket'}" class="btn-theme btn-theme-sm btn-white-brd text-uppercase">Submit a ticket</a>
+
                 </div>
             </div>
         </div>
@@ -154,6 +167,10 @@ function hideDropdown(li) {
 <!--========== SLIDER ==========-->
 
 <!--========== PAGE LAYOUT ==========-->
+
+<div  layout:fragment="chat"id="chat">
+
+</div>
 <!-- About -->
 <div layout:fragment="about">
 

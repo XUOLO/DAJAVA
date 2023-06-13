@@ -37,8 +37,10 @@
                                         <td th:text="${user.id}"> ID</td>
                                         <td th:text="${user.name}">Name</td>
                                         <td th:text="${user.email}">Email</td>
-                                        <td th:text="${user.name}">
-
+                                        <td>
+                                            <ul>
+                                                <li th:each="role : ${user.roles}" th:text="${role.description}"></li>
+                                            </ul>
                                         </td>
                                         <td>
                                             <a th:href="@{'/admin/edit/' + ${user.id}}">Edit</a>

@@ -17,11 +17,18 @@
             <p class="card-description">
               Basic form layout
             </p>
-            <form th:object="${user}" th:action="@{/save}" method="POST">
+
+
+
+            <form th:object="${user}" th:action="@{/admin/edit}" method="POST">
               <div class="form-group">
                 <input type="hidden" th:field="*{id}">
+                <input type="hidden" th:field="*{phone}">
+                <input type="hidden" th:field="*{password}">
+                <input type="hidden" th:field="*{username}">
+                <input type="hidden" th:field="*{address}">
                 <label for="name">Name</label>
-                <input type="text" class="form-control"th:field="*{name}"  id="name" placeholder="Name">
+                <input type="text" class="form-control" th:field="*{name}" id="name" placeholder="Name" t n>
               </div>
 
               <div class="form-group">
@@ -29,11 +36,14 @@
                 <input type="email" th:field="*{email}" class="form-control" id="email" placeholder="Email">
               </div>
               <div class="form-group">
-<!--                <label for="role">Role:</label>-->
-<!--                <select th:field="*{role}" id="role">-->
-<!--                  <option value="EMPLOYEE" th:selected="${user.role=='EMPLOYEE'}">EMPLOYEE</option>-->
-<!--                  <option value="ADMIN" th:selected="${user.role=='ADMIN'}">Admin</option>-->
-<!--                </select>-->
+                <label>Role</label>
+                <select class="form-control" >
+                  <option th:each="role : ${roleList}"
+                          th:value="${role}"
+                          th:text="${role.name}"
+                      ></option>
+                </select>
+
               </div>
 
 

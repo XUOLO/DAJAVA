@@ -51,7 +51,8 @@
         <div class="navbar-menu-wrapper d-flex align-items-top">
             <ul class="navbar-nav">
                 <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
-                    <h1   class="welcome-text">Hi, <span class="text-black fw-bold"   ></span></h1>
+                    <h1   class="welcome-text"  th:if="${session.user != null}">  Hi, [[${name}]]! <span class="text-black fw-bold"   ></span></h1>
+
                     <h3 class="welcome-sub-text"> </h3>
                 </li>
             </ul>
@@ -283,10 +284,29 @@
                         <i class="menu-arrow"></i>
                     </a>
                     <div class="collapse" id="tables">
-                        <ul class="nav flex-column sub-menu">
-                            <li class="nav-item"> <a class="nav-link" href="/admin/listAccount">Account table</a></li>
-                            <li class="nav-item"> <a class="nav-link" href="/admin/listDepartment">Department table</a></li>
-                        </ul>
+
+
+
+
+
+                            <ul class="nav flex-column sub-menu">
+
+                                <!-- Kiểm tra nếu người dùng có vai trò "Admin" -->
+                                <li th:if="${roles.contains('ADMIN')}" class="nav-item">
+                                    <a class="nav-link" href="/admin/listAccount">Account table</a>
+                                </li>
+
+                                <!-- Kiểm tra nếu người dùng có vai trò "Admin" -->
+                                <li th:if="${roles.contains('ADMIN')}" class="nav-item">
+                                    <a class="nav-link" href="/admin/listDepartment">Department table</a>
+                                </li>
+
+                                <!-- Kiểm tra nếu người dùng có vai trò "Employee" -->
+                                <li th:if="${roles.contains('EMPLOYEE')}" class="nav-item">
+                                    <a class="nav-link" href="/admin/listDepartment">Department table</a>
+                                </li>
+
+                            </ul>
                     </div>
                 </li>
                 <li class="nav-item">
@@ -312,14 +332,10 @@
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
                         <i class="menu-icon mdi mdi-account-circle-outline"></i>
-                        <span class="menu-title">User Pages</span>
-                        <i class="menu-arrow"></i>
+                        <span class="menu-title"><a class="nav-link" href="/admin/logout"> Log out </a></span>
+
                     </a>
-                    <div class="collapse" id="auth">
-                        <ul class="nav flex-column sub-menu">
-                            <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                        </ul>
-                    </div>
+
                 </li>
 
 
