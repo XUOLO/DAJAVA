@@ -507,30 +507,40 @@ public String showUpdateForm(@PathVariable("id") Long id, Model model,HttpSessio
 }
 
     @PostMapping("/edit")
-    public String editUser(@Valid @ModelAttribute("user") User user,HttpSession session, BindingResult bindingResult, Model model) {
+    public String editUser(@Valid @ModelAttribute("user") User user,
+                           BindingResult bindingResult,
+                           RedirectAttributes redirectAttributes,
+                           HttpSession session,Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("user", user);
-            model.addAttribute("roleList", roleService.getAllRole());
-            return "Admin/EditAccount";
+            redirectAttributes.addFlashAttribute("error", "Invalid input");
+            return "redirect:/admin/listAccount";
         }
+
         User sessionUser = (User) session.getAttribute("user");
         if (sessionUser != null) {
             String name = sessionUser.getName();
 
             // Tạo list roles để lưu tên các vai trò của người dùng đăng nhập
             List<String> roles = new ArrayList<>();
-            for(Role role : sessionUser.getRoles()){
+            for (Role role : sessionUser.getRoles()) {
                 roles.add(role.getName());
             }
 
-            model.addAttribute("name", name);
-            model.addAttribute("roles", roles); // Đưa danh sách các vai trò vào model
+            redirectAttributes.addFlashAttribute("name", name);
+            redirectAttributes.addFlashAttribute("roles", roles);
+        }
+
+        // Cập nhật thông tin và vai trò của người dùng
+        User updatedUser = userService.editUser(user);
+
+        if (updatedUser == null) {
+            redirectAttributes.addFlashAttribute("error", "User not found");
+        } else {
+            redirectAttributes.addFlashAttribute("success", "Account is updated successfully.");
         }
         model.addAttribute("user", sessionUser);
-        userService.saveUser(user);
         return "redirect:/admin/listAccount";
     }
-
 
     @GetMapping("/delete/{id}")
     public String deleteUser(@Valid @ModelAttribute Long id, RedirectAttributes redirectAttributes) {

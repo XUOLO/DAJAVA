@@ -62,7 +62,31 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public User editUser(User user) {
+        // Lấy danh sách các vai trò được chọn trong form
+        Set<Role> selectedRoles = user.getRoles();
 
+        // Lấy thông tin người dùng từ cơ sở dữ liệu
+        User existingUser = userRepository.findById(user.getId()).orElse(null);
+
+        // Nếu thông tin người dùng không tồn tại, trả về null
+        if (existingUser == null) {
+            return null;
+        }
+
+        // Cập nhật thông tin người dùng từ form
+        existingUser.setName(user.getName());
+        existingUser.setEmail(user.getEmail());
+
+        // Xóa tất cả các vai trò của người dùng hiện tại
+        existingUser.getRoles().clear();
+
+        // Thêm tất cả các vai trò được chọn trong form vào đối tượng User
+        existingUser.getRoles().addAll(selectedRoles);
+
+        // Lưu thay đổi vào cơ sở dữ liệu
+        return userRepository.save(existingUser);
+    }
     public User getUserById(Long id) {
         Optional<User> user = userRepository.findById(id);
         if(user.isPresent()) {

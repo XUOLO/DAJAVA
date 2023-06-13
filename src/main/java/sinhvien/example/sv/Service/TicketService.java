@@ -58,7 +58,12 @@ public class TicketService {
 
         // Duyệt qua danh sách các ticket của user để tìm các ticket khớp với từ khóa tìm kiếm
         for (Ticket ticket : tickets) {
-            if (ticket.getSubject().contains(keyword) || ticket.getPhone().contains(keyword) || ticket.getId().toString().contains(keyword)) { // Nếu ticket chứa từ khóa tìm kiếm
+            String keywordLowerCase = keyword.toLowerCase();
+            String subjectLowerCase = ticket.getSubject().toLowerCase();
+            String phoneLowerCase = ticket.getPhone().toLowerCase();
+            String idLowerCase = ticket.getId().toString().toLowerCase();
+            String departmentLowerCase = ticket.getDepartment().getName().toLowerCase();
+            if (subjectLowerCase.contains(keywordLowerCase) || phoneLowerCase.contains(keywordLowerCase) || idLowerCase.contains(keywordLowerCase) || departmentLowerCase.contains(keywordLowerCase)) {
                 matchedTickets.add(ticket); // Thêm ticket vào danh sách các ticket khớp
             }
         }

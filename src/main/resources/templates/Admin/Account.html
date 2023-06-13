@@ -29,7 +29,7 @@
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>ROLE</th>
-                                        <th>Action</th>
+<!--                                        <th>Action</th>-->
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -42,11 +42,11 @@
                                                 <li th:each="role : ${user.roles}" th:text="${role.description}"></li>
                                             </ul>
                                         </td>
-                                        <td>
-                                            <a th:href="@{'/admin/edit/' + ${user.id}}">Edit</a>
-                                            &nbsp;&nbsp;&nbsp;
-                                            <a th:href="@{'/admin/delete/' + ${user.id}}" onclick="return confirm('Are you sure?')">Delete</a>
-                                        </td>
+<!--                                        <td>-->
+<!--                                            <a th:href="@{'/admin/edit/' + ${user.id}}">Edit</a>-->
+<!--                                            &nbsp;&nbsp;&nbsp;-->
+<!--                                            <a th:href="@{'/admin/delete/' + ${user.id}}" onclick="return confirm('Are you sure?')">Delete</a>-->
+<!--                                        </td>-->
                                     </tr>
 
 

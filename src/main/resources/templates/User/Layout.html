@@ -97,15 +97,7 @@ function hideDropdown(li) {
                          </li>
                         <li class="js_nav-item nav-item dropdown" onmouseover="showDropdown(this)" onmouseout="hideDropdown(this)">
                             <a class="nav-item-child nav-item-hover dropdown-toggle" href="#" th:if="${session.user != null}">
-                                Hi, [[${name}]]!, Roles:
-                                <span th:each="role : ${roles}">
-
-    <!-- Kiểm tra nếu role là Admin, và chỉ hiển thị nếu có -->
-    <span th:if="${role == 'ADMIN'}">
-      <span th:text="'Role: ' + ${role}"></span>
-    </span>
-
-  </span>
+                                Hi, [[${name}]]!
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="/users/accountInfo">Account information</a></li>
