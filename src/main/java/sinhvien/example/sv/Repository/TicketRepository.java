@@ -2,6 +2,7 @@ package sinhvien.example.sv.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import sinhvien.example.sv.Entity.Department;
 import sinhvien.example.sv.Entity.Ticket;
@@ -23,7 +24,11 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
 
 
+    @Query(value ="Select Sum(DonGia*SoLuong) From chitiethoadon cthd JOIN hoadon hd on hd.MaHD = cthd.MaHD WHERE hd.NgayDat like %:date% ", nativeQuery = true)
+    String totalTicket_Date(@Param("date") String date);
 
+    @Query(value ="Select Sum(DonGia*SoLuong) From chitiethoadon cthd JOIN hoadon hd on hd.MaHD = cthd.MaHD WHERE hd.NgayDat like %:month% ", nativeQuery = true)
+    String totalTicket_Month(@Param("month") String month);
 
 
 }

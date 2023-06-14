@@ -71,7 +71,14 @@ public class TicketService {
         return matchedTickets; // Trả về danh sách các ticket khớp với từ khóa tìm kiếm
     }
 
+    public String totalTicket_Date(String date) {
+        return ticketRepository.totalTicket_Date(date);
+    }
 
+    // Tính tổng doanh thu theo tháng
+    public String totalTicket_Month(String month) {
+        return ticketRepository.totalTicket_Month(month);
+    }
     public Ticket findById(Long id) {
         return ticketRepository.findById(id).orElse(null);
     }

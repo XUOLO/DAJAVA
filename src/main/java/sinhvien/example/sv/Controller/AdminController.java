@@ -449,7 +449,51 @@ public String viewRequest(Model model,HttpSession session) {
 //        }
 //    }
 
+    ///ticket statistics
 
+    @GetMapping("/statistic")
+    public String StatisticTicket(Model model,HttpSession session){
+        User sessionUser = (User) session.getAttribute("user");
+        String name = sessionUser.getName();
+
+        // Tạo list roles để lưu tên các vai trò của người dùng đăng nhập
+        List<String> roles = new ArrayList<>();
+        for(Role role : sessionUser.getRoles()){
+            roles.add(role.getName());
+        }
+
+        model.addAttribute("countTicket", ticketRepository.count());
+        model.addAttribute("countCustomer", userService.countCustomers());
+        model.addAttribute("countAdmin", userService.countEmployeesAndAdmins());
+        String Date = java.time.LocalDate.now().toString();
+        model.addAttribute("date",Date);
+        model.addAttribute("month","2022-06");
+
+        model.addAttribute("name", name);
+        model.addAttribute("roles", roles); // Đưa danh sách các vai trò vào model
+        model.addAttribute("user", sessionUser);
+        return "Admin/Statistic";
+    }
+
+
+//Chat
+
+    @GetMapping("/chat")
+    public String chat(Model model,HttpSession session){
+        User sessionUser = (User) session.getAttribute("user");
+        String name = sessionUser.getName();
+
+        // Tạo list roles để lưu tên các vai trò của người dùng đăng nhập
+        List<String> roles = new ArrayList<>();
+        for(Role role : sessionUser.getRoles()){
+            roles.add(role.getName());
+        }
+
+        model.addAttribute("name", name);
+        model.addAttribute("roles", roles); // Đưa danh sách các vai trò vào model
+        model.addAttribute("user", sessionUser);
+        return "Admin/Chat";
+    }
 
     ///Account
 

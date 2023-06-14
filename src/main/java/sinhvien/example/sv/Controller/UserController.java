@@ -121,6 +121,7 @@ public class UserController {
             model.addAttribute("address", address);
 
         }
+
         return "User/AccountInfo";
     }
 
@@ -187,8 +188,16 @@ public class UserController {
         User sessionUser = (User) session.getAttribute("user");
         if (sessionUser != null) {
             String name = sessionUser.getName();
+            String email = sessionUser.getEmail();
+            String phone = sessionUser.getPhone();
+            String address = sessionUser.getAddress();
             model.addAttribute("name", name);
+            model.addAttribute("email", email);
+            model.addAttribute("phone", phone);
+            model.addAttribute("address", address);
+
         }
+
         return "User/chat";
     }
 

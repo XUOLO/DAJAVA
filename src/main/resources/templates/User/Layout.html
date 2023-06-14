@@ -71,7 +71,38 @@ function hideDropdown(li) {
    var dropdown = li.querySelector('.dropdown-menu');
    dropdown.classList.remove('show');
 }
+ // Lấy giá trị của hidden input field
+const defaultUsername = document.querySelector('#default-username').value;
+
+// Kiểm tra nếu đã đăng nhập, đẩy người dùng vào trang chat
+if (defaultUsername.trim()) {
+  document.querySelector('#username-page').classList.add('hidden');
+  document.querySelector('#chat-page').classList.remove('hidden');
+}
+
+// Đăng nhập vào phòng chat với giá trị của hidden input field
+function connect(event) {
+
+    if (username) {
+        return;
+    }
+
+    username = defaultUsername.trim();
+
+    if (username) {
+        const socket = new SockJS('/javatechie');
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, onConnected, onError);
+    }
+    event.preventDefault();
+}
+
+
 </script>
+                <input type="hidden" id="default-username" th:value="${name}" th:if="${session.user != null}">
+
+
                 <div class="menu-container">
                     <ul class="nav navbar-nav navbar-nav-right">
                         <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users">Home</a>
@@ -86,8 +117,8 @@ function hideDropdown(li) {
                         <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover"
                                                             th:href="${session.user == null ? 'users/login' : 'users/MyTicket'}">My
                             ticket</a></li>
-                        <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users/chat">Chat</a>
-                        </li>
+                        <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" th:href="${session.user == null ? '/users/login' : '/users/chat'}" onclick="connect(event)">Chat</a></li>
+
                         <li class="js_nav-item nav-item"><a class="nav-item-child nav-item-hover" href="/users/contact">Contact</a>
                         </li>
 

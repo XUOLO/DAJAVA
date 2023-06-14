@@ -129,7 +129,7 @@ document.getElementById('leave-btn').addEventListener('click', function(event) {
   messageArea.appendChild(messageElement);
 
   // Ẩn phòng chat và hiển thị trang đăng nhập
-  window.location.href = '/users';
+  window.location.href = '/admin/home';
 
   // Reset biến username và stompClient
   username = null;

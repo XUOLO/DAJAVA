@@ -61,7 +61,32 @@ public class UserService {
 
         userRepository.save(user);
     }
-
+    public int countCustomers() {
+        List<User> users = userRepository.findAll();
+        int count = 0;
+        for (User user : users) {
+            for (Role role : user.getRoles()) {
+                if (role.getName().equals("CUSTOMER")) {
+                    count++;
+                    break;
+                }
+            }
+        }
+        return count;
+    }
+    public int countEmployeesAndAdmins() {
+        List<User> users = userRepository.findAll();
+        int count = 0;
+        for (User user : users) {
+            for (Role role : user.getRoles()) {
+                if (role.getName().equals("ADMIN") || role.getName().equals("EMPLOYEE")) {
+                    count++;
+                    break;
+                }
+            }
+        }
+        return count;
+    }
     public User editUser(User user) {
         // Lấy danh sách các vai trò được chọn trong form
         Set<Role> selectedRoles = user.getRoles();
