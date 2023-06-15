@@ -289,9 +289,11 @@
 
                                 <!-- Kiểm tra nếu người dùng có vai trò "Admin" -->
                                 <li th:if="${roles.contains('ADMIN')}" class="nav-item">
-                                    <a class="nav-link" href="/admin/listAccount">Account table</a>
+                                    <a class="nav-link" href="/admin/listAccount">Admin account table</a>
                                 </li>
-
+                                <li th:if="${roles.contains('ADMIN')}" class="nav-item">
+                                    <a class="nav-link" href="/admin/listUserAccount">User account table</a>
+                                </li>
                                 <!-- Kiểm tra nếu người dùng có vai trò "Admin" -->
                                 <li th:if="${roles.contains('ADMIN')}" class="nav-item">
                                     <a class="nav-link" href="/admin/listDepartment">Department table</a>

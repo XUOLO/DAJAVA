@@ -17,17 +17,21 @@
                 <div class="col-lg-6 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Account Table</h4>
+                            <h4 class="card-title">Account Admin Table</h4>
                             <p class="card-description">
                                 <a href="/admin/CreateAccountEmployee"> Add employee</a>
                                 <a>|</a>
-                                <a href="/admin/CreateAccountAdmin"> Add Admin</a>
+                                <a href="/admin/CreateAccountAdmin"> Add admin</a>
+                            <a th:if="${param.success}">
+                                <div  style="color:green;" th:text="${success}"></div>
+                            </a>
+
                             </p>
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
                                     <tr>
-                                        <th>Id</th>
+                                        <th>No.</th>
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>ROLE</th>
@@ -35,13 +39,13 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="user : ${listUser}">
-                                        <td th:text="${user.id}"> ID</td>
+                                    <tr th:each="user,i : ${listUser}">
+                                        <td th:text="${i.index + 1}"></td>
                                         <td th:text="${user.name}">Name</td>
                                         <td th:text="${user.email}">Email</td>
                                         <td>
                                             <ul>
-                                                <li th:each="role : ${user.roles}" th:text="${role.description}"></li>
+                                                <li th:each="role : ${user.roles}" th:text="${role.name}"></li>
                                             </ul>
                                         </td>
                                         <td>
@@ -56,6 +60,29 @@
 
                                     </tbody>
                                 </table>
+                                <div th:if="${totalPages > 1}">
+                                    <div class="row col-md-6">
+                                        <div class="col-md-2">
+      <span th:if="${currentPage > 1}">
+        <a th:href="@{/admin/pageAdmin/} + ${currentPage - 1}">Last</a>
+      </span>
+                                            <span hidden  th:unless="${currentPage > 1}">Last</span>
+                                        </div>
+                                        <div class="col-md-2">
+      <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+        <a th:if="${currentPage != i}" th:href="@{/admin/pageAdmin/} + ${i}">[[${i}]]</a>
+        <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
+      </span>
+                                        </div>
+                                        <div class="col-md-2">
+      <span th:if="${currentPage < totalPages}">
+        <a th:href="@{/admin/pageAdmin/} + ${currentPage + 1}">Next</a>
+      </span>
+                                            <span th:unless="${currentPage < totalPages}">Next</span>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>

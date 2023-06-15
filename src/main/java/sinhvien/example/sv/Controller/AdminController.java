@@ -115,9 +115,125 @@ public class AdminController {
     @Autowired
     private UserRepository userRepository;
 
+    @GetMapping("/pageAdmin/{pageNo}")
+    public String findPaginatedAdmin(@PathVariable(value = "pageNo")int pageNo,Model model,HttpSession session){
+        int pageSize=5;
+        Page<User> page=userService.findPaginated(pageNo,pageSize);
+        List<User> userList = page.getContent();
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages",page.getTotalPages());
+        model.addAttribute("totalItems",page.getTotalElements());
+        model.addAttribute("listUser",userList);
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser != null) {
+            String name = sessionUser.getName();
 
+            // Tạo list roles để lưu tên các vai trò của người dùng đăng nhập
+            List<String> roles = new ArrayList<>();
+            for(Role role : sessionUser.getRoles()){
+                roles.add(role.getName());
+            }
+
+            model.addAttribute("name", name);
+            model.addAttribute("roles", roles); // Đưa danh sách các vai trò vào model
+        }
+        List<User> userListt = userService.GetAllUser();
+        List<User> adminAndEmployeeUsers = userListt.stream()
+                .filter(user -> user.getRoles().stream().anyMatch(role -> role.getName().equals("ADMIN") || role.getName().equals("EMPLOYEE")))
+                .collect(Collectors.toList());
+
+        model.addAttribute("listUser", adminAndEmployeeUsers);
+        model.addAttribute("name", sessionUser.getName());
+        model.addAttribute("user", sessionUser);
+        return "Admin/Account";
+
+    }
 
     @GetMapping("/listAccount")
+    public String viewAdmin(Model model, HttpSession session) {
+        // Kiểm tra đăng nhập
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser == null) {
+            return "redirect:/admin"; // Chuyển hướng đến trang đăng nhập nếu người dùng chưa đăng nhập
+        }
+
+        // Kiểm tra vai trò của người dùng
+        boolean isAdminOrEmployee = false;
+        for(Role role : sessionUser.getRoles()){
+            if(role.getName().equals("ADMIN") || role.getName().equals("EMPLOYEE")) {
+                isAdminOrEmployee = true;
+                break;
+            }
+        }
+
+        if(!isAdminOrEmployee) {
+            return "redirect:/admin"; // Nếu không phải admin hoặc employee, chuyển hướng đến trang đăng nhập
+        }
+
+        // Nếu đã đăng nhập và có vai trò admin/employee, tiếp tục xử lý
+
+        List<User> userList = userService.GetAllUser();
+        List<User> adminAndEmployeeUsers = userList.stream()
+                .filter(user -> user.getRoles().stream().anyMatch(role -> role.getName().equals("ADMIN") || role.getName().equals("EMPLOYEE")))
+                .collect(Collectors.toList());
+
+        model.addAttribute("listUser", adminAndEmployeeUsers);
+        model.addAttribute("name", sessionUser.getName());
+
+
+
+        List<User> user = userRepository.findAll();
+
+
+        String name = sessionUser.getName();
+
+        // Tạo list roles để lưu tên các vai trò của người dùng đăng nhập
+        List<String> roles = new ArrayList<>();
+        for(Role role : sessionUser.getRoles()){
+            roles.add(role.getName());
+        }
+
+        model.addAttribute("name", name);
+        model.addAttribute("roles", roles); // Đưa danh sách các vai trò vào model
+        model.addAttribute("user", sessionUser);
+
+        return findPaginatedAdmin(1, model,session);
+    }
+    @GetMapping("/pageUser/{pageNo}")
+    public String findPaginatedUser(@PathVariable(value = "pageNo")int pageNo,Model model,HttpSession session){
+        int pageSize=5;
+        Page<User> page=userService.findPaginated(pageNo,pageSize);
+        List<User> userList = page.getContent();
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages",page.getTotalPages());
+        model.addAttribute("totalItems",page.getTotalElements());
+        model.addAttribute("listUser",userList);
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser != null) {
+            String name = sessionUser.getName();
+
+            // Tạo list roles để lưu tên các vai trò của người dùng đăng nhập
+            List<String> roles = new ArrayList<>();
+            for(Role role : sessionUser.getRoles()){
+                roles.add(role.getName());
+            }
+
+            model.addAttribute("name", name);
+            model.addAttribute("roles", roles); // Đưa danh sách các vai trò vào model
+        }
+        List<User> userListt = userService.GetAllUser();
+        List<User> adminAndEmployeeUsers = userListt.stream()
+                .filter(user -> user.getRoles().stream().anyMatch(role -> role.getName().equals("CUSTOMER")))
+                .collect(Collectors.toList());
+
+        model.addAttribute("listUser", adminAndEmployeeUsers);
+        model.addAttribute("name", sessionUser.getName());
+        model.addAttribute("user", sessionUser);
+        return "Admin/listUserAccount";
+
+    }
+
+    @GetMapping("/listUserAccount")
     public String viewUser(Model model, HttpSession session) {
         // Kiểm tra đăng nhập
         User sessionUser = (User) session.getAttribute("user");
@@ -139,11 +255,20 @@ public class AdminController {
         }
 
         // Nếu đã đăng nhập và có vai trò admin/employee, tiếp tục xử lý
+
         List<User> userList = userService.GetAllUser();
-        model.addAttribute("listUser", userList);
+        List<User> adminAndEmployeeUsers = userList.stream()
+                .filter(user -> user.getRoles().stream().anyMatch(role -> role.getName().equals("CUSTOMER")))
+                .collect(Collectors.toList());
+
+        model.addAttribute("listUser", adminAndEmployeeUsers);
+        model.addAttribute("name", sessionUser.getName());
+
+
+
 
         List<User> user = userRepository.findAll();
-        model.addAttribute("listUser", user);
+
 
         String name = sessionUser.getName();
 
@@ -157,8 +282,9 @@ public class AdminController {
         model.addAttribute("roles", roles); // Đưa danh sách các vai trò vào model
         model.addAttribute("user", sessionUser);
 
-        return "Admin/Account";
+        return findPaginatedUser(1, model,session);
     }
+
 
     ////Department
     @GetMapping("/listDepartment")
@@ -323,10 +449,10 @@ public class AdminController {
     public String deleteDepartment(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         Department department = departmentService.getDepartment(id);
         if (department == null) {
-            redirectAttributes.addFlashAttribute("error", "User not found!");
+            redirectAttributes.addFlashAttribute("error", "Department not found!");
         } else {
             departmentService.deleteDepartment(id);
-            redirectAttributes.addFlashAttribute("success", "User deleted successfully!");
+            redirectAttributes.addFlashAttribute("success", "Department deleted successfully!");
         }
         return "redirect:/admin/listDepartment";
     }
@@ -690,11 +816,12 @@ public String showUpdateForm(@PathVariable("id") Long id, Model model,HttpSessio
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteUser(@Valid @ModelAttribute Long id, RedirectAttributes redirectAttributes) {
+    public String deleteUser(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         User user = userService.getUser(id);
         if (user == null) {
             redirectAttributes.addFlashAttribute("error", "User not found!");
         } else {
+            user.getRoles().clear();
             userService.deleteUser(id);
             redirectAttributes.addFlashAttribute("success", "User deleted successfully!");
         }

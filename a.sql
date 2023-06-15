@@ -156,7 +156,7 @@ CREATE TABLE `tickets` (
 
 LOCK TABLES `tickets` WRITE;
 /*!40000 ALTER TABLE `tickets` DISABLE KEYS */;
-INSERT INTO `tickets` VALUES (1,'2023-06-12 19:42:03.953559','taolaxuanloc@gmail.com','helpppme','Trần Xuân Lộc','0906303905','3','help me',NULL,15,5),(2,'2023-06-13 14:22:43.274230','taolaxuanloc@gmail.com','mehlp accout','loc 13','0906303905','1','me help',NULL,16,5);
+INSERT INTO `tickets` VALUES (1,'2023-06-12 19:42:03.953559','taolaxuanloc@gmail.com','helpppme','Trần Xuân Lộc','0906303905','2','help me',NULL,15,5),(2,'2023-06-13 14:22:43.274230','taolaxuanloc@gmail.com','mehlp accout','loc 13','0906303905','1','me help',NULL,16,5);
 /*!40000 ALTER TABLE `tickets` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -178,7 +178,7 @@ CREATE TABLE `user` (
   `username` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_sb8bbouer5wak8vyiiy4pf2bx` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -187,7 +187,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (3,'opasd','taolaxuanloc@gmail.com','Trần Xuân Lộc','986a37f83fc34cbd7b22afa93a63d99a72f2f7713a529f7a195def813742fe1a','0906303905','2aae25aeb0ea5aa38f25691940144949bc411b6a3e23e776c8a6abefa003','locxuan'),(4,'nhà ven biển','final0167@gmail.com','Lộc xuân 21','152c02c3c9f860f92a9587da4e4ac95e783ea74482beb737b964441ef71f9ccf','0522046523','2aae25aeb0ea5aa38f25691940144949bc411b6a3e23e776c8a6abefa003','locxuan2'),(5,'opqweqw','xuanloc0906303905@gmail.com','loc custm','fd23b8fd78367818492991f8b46ca07be6ee1f52f76411e21bb9a6a36dc69999','0906303905','cfefddf906631f2bef89cb58df6672cde6fd126db6117f7da8eab36deffd','locxuan3'),(6,'qưeiwdajak','locxa@gmail.com','loccustm2','c798b72a0e50b40795619c7cd77a8ef669d1f379b167f95e2f51a1988d2e67c6','0906303905','947eeb313ceef77dd67b86864d2f4b8f449515baba971a2fe221caa05644','locxuan4');
+INSERT INTO `user` VALUES (3,'opasd','taolaxuanloc@gmail.com','Trần Xuân Lộc','986a37f83fc34cbd7b22afa93a63d99a72f2f7713a529f7a195def813742fe1a','0906303905','2aae25aeb0ea5aa38f25691940144949bc411b6a3e23e776c8a6abefa003','locxuan'),(4,'nhà ven biển','final0167@gmail.com','Lộc xuân 21','152c02c3c9f860f92a9587da4e4ac95e783ea74482beb737b964441ef71f9ccf','0522046523','2aae25aeb0ea5aa38f25691940144949bc411b6a3e23e776c8a6abefa003','locxuan2'),(5,'opqweqw','xuanloc0906303905@gmail.com','loc custm','fd23b8fd78367818492991f8b46ca07be6ee1f52f76411e21bb9a6a36dc69999','0906303905','cfefddf906631f2bef89cb58df6672cde6fd126db6117f7da8eab36deffd','locxuan3'),(13,'phú xuân','xuanloc290901@gmail.com','final_202','df37e9c8b299944459bcd6cec51947b00ce60c39d570a59c56dc8f9c8c733917','0906303905','215c9b83dc6511919681274267b2fb31c45a75ce9e24ebb709ac532b3411','anhlocboro'),(14,'thủ  ','xuanloc2909012@gmail.com','Trần Xuân Lộc','f2bef6b2d6bab53f31d3eb85d37616a9c4770f9153caab0aedb192078437b002','0906303905','8c1c015b4c10c73f948a80294c7c1522e65ccc0d5c4bd53fb2e4e2868319','admin5'),(16,'hcm','xuanloc290902311@gmail.com','Trần Xuân Lộc','49b4cb332e50283c2f153be006c6ecdfb53b5475d707f2f9c9b858cf0fe7f7db','0906303905','bc9bbceeee61849852aab593af30cc4e86b3edb05ae72867fbefbe28270a','admin55');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -214,7 +214,7 @@ CREATE TABLE `users_roles` (
 
 LOCK TABLES `users_roles` WRITE;
 /*!40000 ALTER TABLE `users_roles` DISABLE KEYS */;
-INSERT INTO `users_roles` VALUES (4,1),(3,2),(6,2),(5,3);
+INSERT INTO `users_roles` VALUES (4,1),(14,1),(16,1),(3,2),(5,2),(13,3);
 /*!40000 ALTER TABLE `users_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -227,4 +227,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-14 22:32:17
+-- Dump completed on 2023-06-15 17:54:27

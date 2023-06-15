@@ -5,10 +5,13 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import sinhvien.example.sv.Entity.Department;
 import sinhvien.example.sv.Entity.Role;
 import sinhvien.example.sv.Entity.User;
 import sinhvien.example.sv.Repository.RoleRepository;
@@ -222,4 +225,11 @@ public class UserService {
         String sql = "UPDATE users SET password_hash = ?, salt = ? WHERE username = ?";
         jdbcTemplate.update(sql, newPasswordHash, newSalt, username);
     }
+
+    public Page <User> findPaginated(int pageNo, int pageSize){
+        Pageable pageable= PageRequest.of(pageNo - 1,pageSize);
+        return this.userRepository.findAll(pageable);
+    }
+
+
 }

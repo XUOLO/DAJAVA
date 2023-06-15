@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{Admin/layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>List Account</title>
+</head>
+<body>
+
+<div layout:fragment="main-panel"class="main-panel">
+  <div class="content-wrapper" style="  background: #F4F5F7;
+    padding: 1.5rem 2.187rem 1.5rem 3.5rem;
+    width: 180%;
+    -webkit-flex-grow: 1;
+    flex-grow: 1;" >
+
+    <div class="col-lg-6 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Account User Table</h4>
+          <p class="card-description">
+<!--            <a href="/admin/CreateAccountEmployee"> Add employee</a>-->
+<!--            <a>|</a>-->
+<!--            <a href="/admin/CreateAccountAdmin"> Add admin</a>-->
+<!--            <a th:if="${param.success}">-->
+<!--              <div  style="color:green;" th:text="${success}"></div>-->
+<!--            </a>-->
+
+          </p>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+              <tr>
+                <th>No.</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>ROLE</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="user,i : ${listUser}">
+                <td th:text="${i.index + 1}"></td>
+                <td th:text="${user.name}">Name</td>
+                <td th:text="${user.email}">Email</td>
+                <td>
+                  <ul>
+                    <li th:each="role : ${user.roles}" th:text="${role.name}"></li>
+                  </ul>
+                </td>
+                <td>
+
+                  &nbsp;&nbsp;&nbsp;
+                  <a th:href="@{'/admin/delete/' + ${user.id}}" onclick="return confirm('Are you sure?')">Delete</a>
+                </td>
+              </tr>
+
+
+
+
+              </tbody>
+            </table>
+            <div th:if="${totalPages > 1}">
+              <div class="row col-md-6">
+                <div class="col-md-2">
+      <span th:if="${currentPage > 1}">
+        <a th:href="@{/admin/pageUser/} + ${currentPage - 1}">Last</a>
+      </span>
+                  <span hidden  th:unless="${currentPage > 1}">Last</span>
+                </div>
+                <div class="col-md-2">
+      <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+        <a th:if="${currentPage != i}" th:href="@{/admin/pageUser/} + ${i}">[[${i}]]</a>
+        <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
+      </span>
+                </div>
+                <div class="col-md-2">
+      <span th:if="${currentPage < totalPages}">
+        <a th:href="@{/admin/pageUser/} + ${currentPage + 1}">Next</a>
+      </span>
+                  <span th:unless="${currentPage < totalPages}">Next</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- content-wrapper ends -->
+  <!-- partial:../../partials/_footer.html -->
+
+  <!-- partial -->
+</div>
+</body>
+</html>
