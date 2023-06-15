@@ -61,12 +61,70 @@ public class UserService {
 
         userRepository.save(user);
     }
+    public void saveEmployee(User user) {
+
+        Set<Role> roles;
+
+        if(user.getRoles() != null) {
+            roles = user.getRoles();
+        } else {
+            roles = new HashSet<>();
+        }
+        Role customerRole = roleRepository.findByName("EMPLOYEE");
+
+        roles.add(customerRole); // Gán vai trò CUSTOMER cho tài khoản đăng kí
+        user.setRoles(roles);
+
+        userRepository.save(user);
+    }
+    public void saveAdmin(User user) {
+
+        Set<Role> roles;
+
+        if(user.getRoles() != null) {
+            roles = user.getRoles();
+        } else {
+            roles = new HashSet<>();
+        }
+        Role customerRole = roleRepository.findByName("ADMIN");
+
+        roles.add(customerRole); // Gán vai trò CUSTOMER cho tài khoản đăng kí
+        user.setRoles(roles);
+
+        userRepository.save(user);
+    }
     public int countCustomers() {
         List<User> users = userRepository.findAll();
         int count = 0;
         for (User user : users) {
             for (Role role : user.getRoles()) {
                 if (role.getName().equals("CUSTOMER")) {
+                    count++;
+                    break;
+                }
+            }
+        }
+        return count;
+    }
+    public int countAdmin() {
+        List<User> users = userRepository.findAll();
+        int count = 0;
+        for (User user : users) {
+            for (Role role : user.getRoles()) {
+                if (role.getName().equals("ADMIN")) {
+                    count++;
+                    break;
+                }
+            }
+        }
+        return count;
+    }
+    public int countEmployee() {
+        List<User> users = userRepository.findAll();
+        int count = 0;
+        for (User user : users) {
+            for (Role role : user.getRoles()) {
+                if (role.getName().equals("EMPLOYEE")) {
                     count++;
                     break;
                 }

@@ -22,13 +22,19 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     List<Ticket> findAll(String keyword);
 
 
+    @Query("SELECT t.status, COUNT(t) FROM Ticket t GROUP BY t.status")
+    List<Object[]> countTicketByStatus();
 
+//    @Query(value ="Select Sum(DonGia*SoLuong) From chitiethoadon cthd JOIN hoadon hd on hd.MaHD = cthd.MaHD WHERE hd.NgayDat like %:date% ", nativeQuery = true)
+//    String totalTicket_Date(@Param("date") String date);
+//
+//    @Query(value ="Select Sum(DonGia*SoLuong) From chitiethoadon cthd JOIN hoadon hd on hd.MaHD = cthd.MaHD WHERE hd.NgayDat like %:month% ", nativeQuery = true)
+//    String totalTicket_Month(@Param("month") String month);
 
-    @Query(value ="Select Sum(DonGia*SoLuong) From chitiethoadon cthd JOIN hoadon hd on hd.MaHD = cthd.MaHD WHERE hd.NgayDat like %:date% ", nativeQuery = true)
-    String totalTicket_Date(@Param("date") String date);
-
-    @Query(value ="Select Sum(DonGia*SoLuong) From chitiethoadon cthd JOIN hoadon hd on hd.MaHD = cthd.MaHD WHERE hd.NgayDat like %:month% ", nativeQuery = true)
-    String totalTicket_Month(@Param("month") String month);
-
-
+    @Query("SELECT COUNT(t) FROM Ticket t WHERE t.status = '1'")
+    Long countOpenTickets();
+    @Query("SELECT COUNT(t) FROM Ticket t WHERE t.status = '2'")
+    Long countInProgressTickets();
+    @Query("SELECT COUNT(t) FROM Ticket t WHERE t.status = '3'")
+    Long countResolveTickets();
 }

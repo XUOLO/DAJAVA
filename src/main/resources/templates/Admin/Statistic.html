@@ -11,27 +11,35 @@
         <div class="col-md-4 stretch-card grid-margin">
             <div class="card bg-gradient-danger card-img-holder text-white">
                 <div class="card-body">
-                     <h4 class="font-weight-normal mb-3"><i class="mdi mdi-account-star mdi-24px  ">Total customers :</i>
+                     <h4 class="font-weight-normal mb-3"><i class="mdi mdi-account-star mdi-24px  ">Total customers : [[${countCustomer}]]</i>
                     </h4>
-                    <h2 class="mb-5" th:text="${countCustomer}"> </h2>
+                     <hr>
                 </div>
             </div>
         </div>
         <div class="col-md-4 stretch-card grid-margin">
             <div class="card bg-gradient-info card-img-holder text-white">
                 <div class="card-body">
-                     <h4 class="font-weight-normal mb-3"><i class="mdi mdi-application mdi-24px  ">Total tickets :</i>
+                     <h4 class="font-weight-normal mb-3"><i class="mdi mdi-application mdi-24px  ">Total tickets : [[${countTicket}]]</i>
                     </h4>
-                    <h2 class="mb-5" th:text="${countTicket}"></h2>
+
+                    <hr>
+                    <h2 class="mb-5"  >Open : [[${openTicketCount}]]</h2>
+                    <h2 class="mb-5"  >In-progress : [[${InProgressTicketCount}]]</h2>
+                    <h2 class="mb-5" > Resolve : [[${ResolveCount}]]</h2>
+
                 </div>
             </div>
         </div>
         <div class="col-md-4 stretch-card grid-margin">
             <div class="card bg-gradient-success card-img-holder text-white">
                 <div class="card-body">
-                     <h4 class="font-weight-normal mb-3"><i class="menu-icon mdi mdi-account-circle-outline mdi-24px  ">Total employee :</i>
+                     <h4 class="font-weight-normal mb-3"><i class="menu-icon mdi mdi-account-circle-outline mdi-24px  ">Total employee : [[${countAdminAndEmployee}]]</i>
                     </h4>
-                    <h2 class="mb-5" th:text="${countAdmin}"></h2>
+
+                    <hr>
+                    <h2 class="mb-5"  >Admin : [[${countAdmin}]]</h2>
+                    <h2 class="mb-5"  >Employee : [[${countEmployee}]]</h2>
                 </div>
             </div>
         </div>

@@ -17,35 +17,36 @@
             <p class="card-description">
               Basic form layout
             </p>
-            <form  class="forms-sample"action="#" th:action="@{/admin/CreateAccount}" th:object="${user}" method="POST">
-
+            <form th:action="@{/admin/saveEmployee}"  th:object="${user}" method="post">
               <div class="form-group">
                 <label for="name">Name</label>
-                <input class="form-control" type="text" th:field="*{name}" id="name"/>
+                <input class="form-control" type="text" th:field="*{name}" id="name" required/>
                 <span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
               </div>
               <div class="form-group">
                 <label for="username">Username</label>
-                <input class="form-control" type="text" th:field="*{username}" id="username"/>
-                <span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+                <input class="form-control" type="text" th:field="*{username}" id="username" required/>
+                <div th:errors="*{username}" class="text-danger"></div>
+
               </div>
               <div class="form-group">
                 <label for="email">Email address</label>
-                <input class="form-control" type="text" th:field="*{email}" id="email"/>
-                <span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                <input class="form-control" type="text" th:field="*{email}" id="email" required/>
+                <div th:errors="*{email}" class="text-danger"></div>
               </div>
               <div class="form-group">
-                <label for="roles">Roles</label>
-                <select class="form-control" id="roles" name="role.id">
-
-
-                  <option value="">---Role List---</option>
-                  <option th:each=" role : ${roles}"  th:value="${role}" th:text="${role.name}" ></option>
-                </select>
+                <label for="phone">Phone</label>
+                <input class="form-control" type="text" th:field="*{phone}" id="phone" required/>
+                <span class="text-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
+              </div>
+              <div class="form-group">
+                <label for="address">Address</label>
+                <input class="form-control" type="text" th:field="*{address}" id="address" required/>
+                <span class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
               </div>
               <div class="form-group">
                 <label for="password">Password</label>
-                <input class="form-control" type="text" th:field="*{password}" id="password"/>
+                <input class="form-control" type="password" th:field="*{password}" id="password" required/>
                 <span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
               </div>
 

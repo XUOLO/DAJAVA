@@ -330,10 +330,15 @@ public class UserController {
         // Check if user already exists
         User existingUser = userService.findUserByUsernameOrEmail(user.getUsername(), user.getEmail());
         if (existingUser != null) {
-            if (existingUser.getUsername().equals(user.getUsername())) {
+            if (existingUser.getUsername().equals(user.getUsername()) && existingUser.getEmail().equals(user.getEmail())) {
+                result.rejectValue("username", "error.user", "This username and email are already taken");
+                model.addAttribute("error", "This username and email are already taken");
+            } else if (existingUser.getUsername().equals(user.getUsername())) {
                 result.rejectValue("username", "error.user", "This username is already taken");
+                model.addAttribute("error", "This username is already taken");
             } else {
                 result.rejectValue("email", "error.user", "This email is already registered");
+                model.addAttribute("error", "This email is already registered");
             }
             return "User/register";
         }
@@ -344,13 +349,7 @@ public class UserController {
         user.setSalt(salt);
         user.setPassword(hashedPassword);
         userService.saveUser(user);
-        if (existingUser != null) {
-            if (existingUser.getUsername().equals(user.getUsername())) {
-                result.rejectValue("username", "error.user", "This username is already taken");
-            } else {
-                result.rejectValue("email", "error.user", "This email is already registered");
-            }
-        }
+
         return "redirect:/users/login";
     }
 

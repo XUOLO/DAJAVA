@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -464,13 +465,24 @@ public String viewRequest(Model model,HttpSession session) {
 
         model.addAttribute("countTicket", ticketRepository.count());
         model.addAttribute("countCustomer", userService.countCustomers());
-        model.addAttribute("countAdmin", userService.countEmployeesAndAdmins());
+        model.addAttribute("countAdmin", userService.countAdmin());
+        model.addAttribute("countEmployee", userService.countEmployee());
+        model.addAttribute("countAdminAndEmployee", userService.countEmployeesAndAdmins());
         String Date = java.time.LocalDate.now().toString();
         model.addAttribute("date",Date);
         model.addAttribute("month","2022-06");
 
         model.addAttribute("name", name);
         model.addAttribute("roles", roles); // Đưa danh sách các vai trò vào model
+
+        Map<String, Long> ticketCounts = ticketService.countTicketByStatus();
+        model.addAttribute("ticketCounts", ticketCounts);
+        Long openTicketCount = ticketService.countOpenTickets();
+        Long countInProgressTickets = ticketService.countInProgressTickets();
+        Long countResolveTickets = ticketService.countResolveTickets();
+        model.addAttribute("openTicketCount", openTicketCount);
+        model.addAttribute("InProgressTicketCount", countInProgressTickets);
+        model.addAttribute("ResolveCount", countResolveTickets);
         model.addAttribute("user", sessionUser);
         return "Admin/Statistic";
     }
@@ -496,37 +508,129 @@ public String viewRequest(Model model,HttpSession session) {
     }
 
     ///Account
-
-    @GetMapping("/CreateAccount")
-    public String addBookForm(Model model) {
+//new employee
+    @GetMapping("/CreateAccountEmployee")
+    public String addEmpoyeeForm(Model model) {
         List<Role> roles = roleService.getAllRole();
         model.addAttribute("user", new User());
         model.addAttribute("roles", roles);
 
-        return "Admin/CreateAccount";
+        return "Admin/CreateAccountEmployee";
     }
-    @PostMapping("/CreateAccount")
+    @PostMapping("/CreateAccountEmployee")
     public String addACCOUNT(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("roles", roleService.getAllRole());
             model.addAttribute("user", user);
 
-            return "admin/CreateAccount";
+            return "admin/CreateAccountEmployee";
         }
         userService.saveUser(user);
         return "redirect:/admin/listAccount";
     }
+    @PostMapping("/saveEmployee")
+    public String registerUser(@ModelAttribute("user") @Valid User user, BindingResult result, Model model) {
+        User existingUser = userService.findUserByUsernameOrEmail(user.getUsername(), user.getEmail());
+        if (result.hasErrors()) {
+            if (existingUser.getUsername().equals(user.getUsername()) && existingUser.getEmail().equals(user.getEmail())) {
+                result.rejectValue("username", "error.user", "This username and email are already taken");
+                model.addAttribute("error", "This username and email are already taken");
+            } else if (existingUser.getUsername().equals(user.getUsername())) {
+                result.rejectValue("username", "error.user", "This username is already taken");
+                model.addAttribute("error", "This username is already taken");
+            } else {
+                result.rejectValue("email", "error.user", "This email is already registered");
+                model.addAttribute("error", "This email is already registered");
+            }
+            return "Admin/CreateAccountEmployee";
+        }
 
-//    @GetMapping("/edit/{id}")
-//    public String editAccount(@PathVariable Long id, Model model) {
-//        User user = userService.getUser(id);
-//        model.addAttribute("user", user);
+        // Check if user already exists
+
+        if (existingUser != null) {
+            if (existingUser.getUsername().equals(user.getUsername()) && existingUser.getEmail().equals(user.getEmail())) {
+                result.rejectValue("username", "error.user", "This username and email are already taken");
+                model.addAttribute("error", "This username and email are already taken");
+            } else if (existingUser.getUsername().equals(user.getUsername())) {
+                result.rejectValue("username", "error.user", "This username is already taken");
+                model.addAttribute("error", "This username is already taken");
+            } else {
+                result.rejectValue("email", "error.user", "This email is already registered");
+                model.addAttribute("error", "This email is already registered");
+            }
+            return "Admin/CreateAccountEmployee";
+        }
+
+        String salt = PasswordUtils.getSalt(30);
+        String hashedPassword = PasswordUtils.generateSecurePassword(user.getPassword(), salt);
+
+        user.setSalt(salt);
+        user.setPassword(hashedPassword);
+        userService.saveEmployee(user);
+
+        return "redirect:/admin/listAccount";
+    }
+//new admin
+    @GetMapping("/CreateAccountAdmin")
+    public String addAdminForm(Model model) {
+        List<Role> roles = roleService.getAllRole();
+        model.addAttribute("user", new User());
+        model.addAttribute("roles", roles);
+
+        return "Admin/CreateAccountAdmin";
+    }
+    @PostMapping("/CreateAccountAdmin")
+    public String addACCOUNTAdmin(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("roles", roleService.getAllRole());
+            model.addAttribute("user", user);
+
+            return "admin/CreateAccountEmployee";
+        }
+        userService.saveUser(user);
+        return "redirect:/admin/listAccount";
+    }
+    @PostMapping("/saveAdmin")
+    public String saveAccountAdmin(@ModelAttribute("user") @Valid User user, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+
+            return "Admin/CreateAccountAdmin";
+        }
+
+        // Check if user already exists
+        User existingUser = userService.findUserByUsernameOrEmail(user.getUsername(), user.getEmail());
+        if (existingUser != null) {
+            if (existingUser.getUsername().equals(user.getUsername()) && existingUser.getEmail().equals(user.getEmail())) {
+                result.rejectValue("username", "error.user", "This username and email are already taken");
+                model.addAttribute("error", "This username and email are already taken");
+            } else if (existingUser.getUsername().equals(user.getUsername())) {
+                result.rejectValue("username", "error.user", "This username is already taken");
+                model.addAttribute("error", "This username is already taken");
+            } else {
+                result.rejectValue("email", "error.user", "This email is already registered");
+                model.addAttribute("error", "This email is already registered");
+            }
+            return "Admin/CreateAccountAdmin";
+        }
+
+        String salt = PasswordUtils.getSalt(30);
+        String hashedPassword = PasswordUtils.generateSecurePassword(user.getPassword(), salt);
+
+        user.setSalt(salt);
+        user.setPassword(hashedPassword);
+        userService.saveAdmin(user);
+
+        return "redirect:/admin/listAccount";
+    }
 //
-//        List<Role> roleList = roleRepository.findAll();
-//        model.addAttribute("roleList", roleList);
-//
-//        return "Admin/EditAccount";
-//    }
+    @PostMapping("/savePhanQuyen")
+    public String saveQuyen(@ModelAttribute("quyen") Role phanquyen) {
+        roleService.saveRole(phanquyen);
+        return "redirect:/admin/listAccount";
+    }
+
+
+
 @GetMapping("/edit/{id}")
 public String showUpdateForm(@PathVariable("id") Long id, Model model,HttpSession session) {
     User user = userService.getUserById(id);
@@ -536,7 +640,6 @@ public String showUpdateForm(@PathVariable("id") Long id, Model model,HttpSessio
     User sessionUser = (User) session.getAttribute("user");
     if (sessionUser != null) {
         String name = sessionUser.getName();
-
         // Tạo list roles để lưu tên các vai trò của người dùng đăng nhập
         List<String> roles = new ArrayList<>();
         for(Role role : sessionUser.getRoles()){

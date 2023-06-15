@@ -19,7 +19,9 @@
                         <div class="card-body">
                             <h4 class="card-title">Account Table</h4>
                             <p class="card-description">
-                                <a href="/admin/CreateAccount"> Add account</a>
+                                <a href="/admin/CreateAccountEmployee"> Add employee</a>
+                                <a>|</a>
+                                <a href="/admin/CreateAccountAdmin"> Add Admin</a>
                             </p>
                             <div class="table-responsive">
                                 <table class="table">
@@ -29,7 +31,7 @@
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>ROLE</th>
-<!--                                        <th>Action</th>-->
+                                        <th>Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -42,11 +44,11 @@
                                                 <li th:each="role : ${user.roles}" th:text="${role.description}"></li>
                                             </ul>
                                         </td>
-<!--                                        <td>-->
-<!--                                            <a th:href="@{'/admin/edit/' + ${user.id}}">Edit</a>-->
-<!--                                            &nbsp;&nbsp;&nbsp;-->
-<!--                                            <a th:href="@{'/admin/delete/' + ${user.id}}" onclick="return confirm('Are you sure?')">Delete</a>-->
-<!--                                        </td>-->
+                                        <td>
+
+                                            &nbsp;&nbsp;&nbsp;
+                                            <a th:href="@{'/admin/delete/' + ${user.id}}" onclick="return confirm('Are you sure?')">Delete</a>
+                                        </td>
                                     </tr>
 
 

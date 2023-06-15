@@ -10,9 +10,7 @@ import sinhvien.example.sv.Entity.Ticket;
 import sinhvien.example.sv.Entity.User;
 import sinhvien.example.sv.Repository.TicketRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class TicketService {
@@ -71,19 +69,43 @@ public class TicketService {
         return matchedTickets; // Trả về danh sách các ticket khớp với từ khóa tìm kiếm
     }
 
-    public String totalTicket_Date(String date) {
-        return ticketRepository.totalTicket_Date(date);
-    }
-
-    // Tính tổng doanh thu theo tháng
-    public String totalTicket_Month(String month) {
-        return ticketRepository.totalTicket_Month(month);
-    }
+//    public String totalTicket_Date(String date) {
+//        return ticketRepository.totalTicket_Date(date);
+//    }
+//
+//    // Tính tổng doanh thu theo tháng
+//    public String totalTicket_Month(String month) {
+//        return ticketRepository.totalTicket_Month(month);
+//    }
     public Ticket findById(Long id) {
         return ticketRepository.findById(id).orElse(null);
     }
     public Page<Ticket> findPaginatedRequest(int pageNo, int pageSize){
         Pageable pageable= PageRequest.of(pageNo - 1,pageSize);
         return this.ticketRepository.findAll(pageable);
+    }
+
+    public Map<String, Long> countTicketByStatus() {
+        Map<String, Long> result = new HashMap<>();
+        List<Object[]> ticketCounts = ticketRepository.countTicketByStatus();
+        for (Object[] ticketCount : ticketCounts) {
+            String status = (String) ticketCount[0];
+            Long count = (Long) ticketCount[1];
+            result.put(status, count);
+        }
+        return result;
+    }
+
+
+    public Long countOpenTickets() {
+        return ticketRepository.countOpenTickets();
+    }
+
+    public Long countInProgressTickets() {
+        return ticketRepository.countInProgressTickets();
+    }
+
+    public Long countResolveTickets() {
+        return ticketRepository.countResolveTickets();
     }
 }

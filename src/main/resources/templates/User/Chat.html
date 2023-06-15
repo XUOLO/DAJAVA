@@ -100,8 +100,8 @@ function hideDropdown(li) {
 </div>
 <div  layout:fragment="chat"id="chat">
 
-  <section
-         >
+  <section>
+
   <noscript>
     <h2>Sorry! Your browser doesn't support Javascript</h2>
   </noscript>
@@ -113,8 +113,6 @@ function hideDropdown(li) {
         <div class="form-group">
           <input type="text" id="name" th:value="${name}"
                  autocomplete="off" class="form-control"th:if="${session.user != null}" />
-
-
         </div>
         <div class="form-group">
           <button type="submit" class="accent username-submit">Start

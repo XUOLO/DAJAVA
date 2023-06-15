@@ -9,6 +9,7 @@ import sinhvien.example.sv.Repository.UserRepository;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -26,6 +27,18 @@ public class RoleService {
     }
     public Role getRole(Long id) {
         return roleRepository.findById(id).orElse(null);
+    }
+    public Role getRoleById(long id) {
+        Optional<Role> optional = roleRepository.findById(id);
+        Role role = null;
+        if (optional.isPresent()) {
+            role = optional.get();
+        }
+        else
+        {
+            throw new RuntimeException(" no info ");
+        }
+        return role;
     }
 
     public Role getRoleByName(String name) {
