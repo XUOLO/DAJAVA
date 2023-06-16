@@ -16,11 +16,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import sinhvien.example.sv.Entity.Department;
-import sinhvien.example.sv.Entity.Role;
-import sinhvien.example.sv.Entity.Ticket;
-import sinhvien.example.sv.Entity.User;
+import sinhvien.example.sv.Entity.*;
 import sinhvien.example.sv.Security.PasswordUtils;
+import sinhvien.example.sv.Service.ChatService;
 import sinhvien.example.sv.Service.DepartmentService;
 import sinhvien.example.sv.Service.TicketService;
 import sinhvien.example.sv.Service.UserService;
@@ -40,6 +38,8 @@ public class UserController {
     private JavaMailSender mailSender;
     @Autowired
     private DepartmentService departmentService;
+    @Autowired
+    private ChatService chatService;
     @Autowired
     private TicketService ticketService;
     @Autowired
@@ -381,6 +381,36 @@ public class UserController {
         session.setAttribute("userId", user.getId());
         session.setAttribute("user", user);
         return "redirect:/users";
+    }
+
+
+
+
+    ////chat
+
+    @PostMapping("/StartChat")
+    public String addDepartment(@Valid @ModelAttribute("chat") Chat chat,HttpSession session, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("chat", chat);
+            return "User/Chat";
+        }
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser != null) {
+            String name = sessionUser.getName();
+
+            // Tạo list roles để lưu tên các vai trò của người dùng đăng nhập
+            List<String> roles = new ArrayList<>();
+            for(Role role : sessionUser.getRoles()){
+                roles.add(role.getName());
+            }
+
+            model.addAttribute("name", name);
+            model.addAttribute("roles", roles); // Đưa danh sách các vai trò vào model
+        }
+        model.addAttribute("user", sessionUser);
+        chat.setEndTime(LocalDateTime.now());
+        chatService.saveChat(chat);
+        return "User/Chat";
     }
 
 }

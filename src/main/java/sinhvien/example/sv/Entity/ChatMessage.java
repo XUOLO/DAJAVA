@@ -3,6 +3,16 @@ package sinhvien.example.sv.Entity;
 public class ChatMessage {
 	private String content;
 	private String sender;
+
+	public String getProblem() {
+		return problem;
+	}
+
+	public void setProblem(String problem) {
+		this.problem = problem;
+	}
+
+	private String problem;
 	private MessageType type;
 
 	public enum MessageType {

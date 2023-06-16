@@ -6,22 +6,21 @@
     <title>Chat</title>
 </head>
 <body>
-<div layout:fragment="main-panel" >
+<div layout:fragment="main-panel" class="chatAdmin">
 
+    <section>
 
-    <section
-    >
         <noscript>
             <h2>Sorry! Your browser doesn't support Javascript</h2>
         </noscript>
 
-        <div id="username-page">
+        <div id="username-page" class="nameAdmin">
             <div class="username-page-container">
-                <h1 class="title">Type your username</h1>
+                <h1 class="title">Type your name</h1>
                 <form id="usernameForm" name="usernameForm">
                     <div class="form-group">
                         <input type="text" id="name" th:value="${name}"
-                               autocomplete="off" class="form-control"th:if="${session.user != null}" />
+                               autocomplete="off" class="form-control"th:if="${session.user != null}" style="display:none;"/>
 
 
                     </div>
@@ -36,7 +35,7 @@
         <div id="chat-page" class="hidden">
             <div class="chat-container">
                 <div class="chat-header">
-                    <h2>Chat with employee</h2>
+                    <h2>Chat with customer</h2>
 
 
                 </div>
@@ -60,7 +59,7 @@
                 </form>
             </div>
         </div>
-        <link rel="stylesheet" href="../../Users/css/main.css" />
+        <link rel="stylesheet" href="../../Users/css/mainl.css" />
         <script
                 src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
         <script

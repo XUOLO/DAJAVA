@@ -10,7 +10,7 @@ const connectingElement = document.querySelector('.connecting');
 
 let stompClient = null;
 let username = null;
-
+let problem = null;
 const colors = [
     '#2196F3', '#32c787', '#00BCD4', '#ff5652',
     '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
@@ -18,7 +18,7 @@ const colors = [
 
 function connect(event) {
     username = document.querySelector('#name').value.trim();
-
+    problem = document.querySelector('#problem').value.trim();
     if (username) {
         usernamePage.classList.add('hidden');
         chatPage.classList.remove('hidden');
@@ -28,6 +28,15 @@ function connect(event) {
 
         stompClient.connect({}, onConnected, onError);
     }
+     if (problem) {
+            usernamePage.classList.add('hidden');
+            chatPage.classList.remove('hidden');
+
+            const socket = new SockJS('/javatechie');
+            stompClient = Stomp.over(socket);
+
+            stompClient.connect({}, onConnected, onError);
+        }
     event.preventDefault();
 }
 
@@ -38,7 +47,7 @@ function onConnected() {
     // Tell your username to the server
     stompClient.send("/app/chat.register",
         {},
-        JSON.stringify({sender: username, type: 'JOIN'})
+        JSON.stringify({sender: username,problem:problem , type: 'JOIN'})
     );
 
     connectingElement.classList.add('hidden');
@@ -55,6 +64,7 @@ function send(event) {
     if (messageContent && stompClient) {
         const chatMessage = {
             sender: username,
+            problem: problem,
             content: messageInput.value,
             type: 'CHAT'
         };
@@ -71,19 +81,23 @@ function onMessageReceived(payload) {
     const messageElement = document.createElement('li');
 
     if (message.type === 'JOIN') {
+        // Check if the join message has already been displayed
+        const joinMessageExists = messageArea.querySelector(`.event-message.join-message[data-sender="${message.sender}"]`);
+        if (joinMessageExists) {
+            return;
+        }
         messageElement.classList.add('event-message');
-        message.content = message.sender + ' joined the chat!';
-    } else if (message.type === 'LEAVE') { // Thêm điều kiện xử lý khi người dùng rời khỏi phòng chat
+        messageElement.classList.add('join-message');
+        messageElement.dataset.sender = message.sender;
+        message.content = message.sender + ' joined the chat!' + ' with problem :' + ' ' + message.problem;
+    } else if (message.type === 'LEAVE') {
         messageElement.classList.add('event-message');
-        message.content = message.sender + ' has left the chat.'; // Hiển thị thông báo "name has left the chat"
+        message.content = message.sender + ' has left the chat.';
     } else {
         messageElement.classList.add('chat-message');
-
         const avatarElement = document.createElement('i');
         avatarElement.style['background-color'] = getAvatarColor(message.sender);
-
         messageElement.appendChild(avatarElement);
-
         const usernameElement = document.createElement('span');
         usernameElement.textContent = message.sender;
         messageElement.appendChild(usernameElement);
@@ -135,3 +149,4 @@ document.getElementById('leave-btn').addEventListener('click', function(event) {
   username = null;
   stompClient = null;
 });
+
