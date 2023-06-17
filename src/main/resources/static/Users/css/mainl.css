@@ -178,7 +178,12 @@ button.accent {
     float: left;
     width: calc(100% - 188px);
 }
-
+button.accent.username-submit {
+    height: 100px;
+    width: 200px;
+    font-size: 25px;
+    font-weight: bold;
+}
 #messageForm .input-group button {
     float: left;
     width: 80px;

@@ -418,4 +418,97 @@ public class UserController {
         return "User/Chat";
     }
 
+
+//    @PostMapping("/login")
+//    public String login(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, HttpSession session, Model model) {
+//        if (bindingResult.hasErrors()) {
+//            return "User/login";
+//        }
+//
+//        User existingUser = userService.findUserByUsername(user.getUsername());
+//        if (existingUser == null) {
+//            bindingResult.rejectValue("username", "error.user", "Invalid username or password");
+//            return "User/login";
+//        }
+//
+//        String hashedPassword = PasswordUtils.generateSecurePassword(user.getPassword(), existingUser.getSalt());
+//
+//        if (!existingUser.getPassword().equals(hashedPassword)) {
+//            bindingResult.rejectValue("username", "error.user", "Invalid username or password");
+//            return "User/login";
+//        }
+//
+//        if (!existingUser.isEmailVerified()) {
+//            bindingResult.rejectValue("username", "error.user", "Please verify your email address");
+//            return "User/login";
+//        }
+//
+//        session.setAttribute("userId", existingUser.getId());
+//        session.setAttribute("user", existingUser);
+//        return "redirect:/users";
+//    }
+
+//    @GetMapping("/register")
+//    public String showRegistrationPage(Model model) {
+//        model.addAttribute("user", new User());
+//        return "User/register";
+//    }
+//
+//    @PostMapping("/register")
+//    public String registerUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) {
+//        if (bindingResult.hasErrors()) {
+//            return "User/register";
+//        }
+//
+//        User existingUser = userService.findUserByUsernameOrEmail(user.getUsername(), user.getEmail());
+//        if (existingUser != null) {
+//            if (existingUser.getUsername().equals(user.getUsername()) && existingUser.getEmail().equals(user.getEmail())) {
+//                bindingResult.rejectValue("username", "error.user", "This username and email are already taken");
+//            } else if (existingUser.getUsername().equals(user.getUsername())) {
+//                bindingResult.rejectValue("username", "error.user", "This username is already taken");
+//            } else {
+//                bindingResult.rejectValue("email", "error.user", "This email is already registered");
+//            }
+//            return "User/register";
+//        }
+//
+//        String salt = PasswordUtils.getSalt(30);
+//        String hashedPassword = PasswordUtils.generateSecurePassword(user.getPassword(), salt);
+//        String emailVerificationToken = UUID.randomUUID().toString();
+//
+//        user.setSalt(salt);
+//        user.setPassword(hashedPassword);
+//        user.setEmailVerificationToken(emailVerificationToken);
+//
+//        userService.saveUser(user);
+//
+//        String subject = "Email verification";
+//        String confirmationUrl = "http://localhost:8080/confirm-email?token=" + emailVerificationToken;
+//        String message = "Please click on the following link to verify your email address: " + confirmationUrl;
+//
+//        SimpleMailMessage mailMessage = new SimpleMailMessage();
+//        mailMessage.setTo(user.getEmail());
+//        mailMessage.setSubject(subject);
+//        mailMessage.setText(message);
+//        mailSender.send(mailMessage);
+//
+//        model.addAttribute("message", "You have been registered successfully. Please check your email to verify your account.");
+//        return "User/login";
+//    }
+//
+//    @GetMapping("/confirm-email")
+//    public String confirmEmail(@RequestParam("token") String emailVerificationToken, Model model) {
+//        User user = userService.findUserByEmailVerificationToken(emailVerificationToken);
+//        if (user == null) {
+//            model.addAttribute("error", "Invalid token");
+//            return "User/login";
+//        }
+//        user.setEmailVerified(true);
+//        user.setEmailVerificationToken(null);
+//        userService.saveUser(user);
+//        model.addAttribute("message", "Your email address has been verified successfully. Please log in to continue.");
+//        return "User/login";
+//    }
+//
+
 }

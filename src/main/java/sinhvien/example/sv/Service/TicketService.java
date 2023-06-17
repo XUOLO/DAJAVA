@@ -26,13 +26,13 @@ public class TicketService {
         return ticketRepository.findByUserAndDepartment(user, department);
     }
 
-//    public List<Ticket> getTicketsByStatus(Ticket.TicketStatus status) {
-//        return ticketRepository.findByStatus(status);
-//    }
 
     public Ticket saveTicket(Ticket ticket) {
         ticketRepository.save(ticket);
         return ticket;
+    }
+    public List<Ticket> getAllTickets() {
+        return ticketRepository.findAll();
     }
 
     public void deleteTicket(Long id) {
@@ -69,14 +69,7 @@ public class TicketService {
         return matchedTickets; // Trả về danh sách các ticket khớp với từ khóa tìm kiếm
     }
 
-//    public String totalTicket_Date(String date) {
-//        return ticketRepository.totalTicket_Date(date);
-//    }
-//
-//    // Tính tổng doanh thu theo tháng
-//    public String totalTicket_Month(String month) {
-//        return ticketRepository.totalTicket_Month(month);
-//    }
+
     public Ticket findById(Long id) {
         return ticketRepository.findById(id).orElse(null);
     }

@@ -21,6 +21,8 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     @Query("SELECT t FROM Ticket t JOIN t.department d WHERE CONCAT(t.subject, d.name, t.code, t.name) LIKE %?1%")
     List<Ticket> findAll(String keyword);
 
+    List<Ticket> findAll();
+
 
     @Query("SELECT t.status, COUNT(t) FROM Ticket t GROUP BY t.status")
     List<Object[]> countTicketByStatus();

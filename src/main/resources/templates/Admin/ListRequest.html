@@ -40,7 +40,14 @@
     -webkit-flex-grow: 1;
     flex-grow: 1;" >
 <style>
-
+a.btn.btn-primary.pdf {
+    margin-left: 87%;
+    margin-top: -6%;
+}
+a.btn.btn-primary.excel {
+    margin-left: 70%;
+    margin-top: -3%;
+}
 .search-form {
   display: inline-block; /* hiển thị form search trên cùng 1 dòng với các phần tử khác */
   position: relative; /* set vị trí của form search thành relative để có thể hiển thị icon search */
@@ -182,7 +189,7 @@
     <div class="col-lg-6 grid-margin stretch-card">
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title">List request</h4>
+          <h4 class="card-title">List request<div> <a class="btn btn-primary excel" href="/admin/export-excel">Export to excel</a><a class="btn btn-primary pdf" href="/admin/export-pdf">Export to pdf</a></div></h4>
 
           <form method="post" action="/admin/ListRequest/search">
 
@@ -192,9 +199,7 @@
           <div th:if="${errorMessage}" class="alert alert-danger">
             <p th:text="${errorMessage}"></p>
           </div>
-          <p class="card-description">
 
-          </p>
           <div class="table-responsive">
             <table class="table">
               <thead>
