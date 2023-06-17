@@ -170,7 +170,7 @@ function hideDropdown(li) {
     </thead>
     <tbody>
     <tr th:each="ticket : ${tickets}">
-      <td th:text="${ticket.id}"></td>
+      <td th:text="${ticket.code}"></td>
       <td th:text="${ticket.name}"></td>
 
       <td th:text="${ticket.email}">Email</td>

@@ -18,7 +18,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     //    List<Ticket> findByStatus(Ticket.TicketStatus status);
     List<Ticket> findByUserId(Long userId);
 
-    @Query("SELECT t FROM Ticket t JOIN t.department d WHERE CONCAT(t.subject, d.name, t.id) LIKE %?1%")
+    @Query("SELECT t FROM Ticket t JOIN t.department d WHERE CONCAT(t.subject, d.name, t.code, t.name) LIKE %?1%")
     List<Ticket> findAll(String keyword);
 
 

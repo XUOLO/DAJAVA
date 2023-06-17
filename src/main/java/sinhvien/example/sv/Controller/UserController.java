@@ -25,10 +25,7 @@ import sinhvien.example.sv.Service.UserService;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Controller
@@ -233,6 +230,11 @@ public class UserController {
         Long userId = (Long) session.getAttribute("userId");
         User user = userService.getUser(userId);
         ticket.setUser(user);
+
+        Random random = new Random();
+        int randomNumber = random.nextInt(900000) + 100000;
+        String code = "TK" + String.valueOf(randomNumber);
+        ticket.setCode(code);
         ticketService.saveTicket(ticket);
 
         redirectAttributes.addFlashAttribute("successMessage", "Ticket has been submitted successfully! Please check your mail.");
@@ -253,7 +255,7 @@ public class UserController {
         userHelper.setFrom("xuanloc290901@gmail.com"); // Email người gửi
         userHelper.setTo(email); // Email người nhận lấy từ form
         userHelper.setSubject(subject); // Tiêu đề
-        userHelper.setText("Name: " + name + "\nPhone: " + phone + "\nMessage: " + message, false); // Nội dung
+        userHelper.setText("Name: " + name + "\nPhone: " + phone + "\nMessage: " + message + "\nTicket ID: " + code, false); // Nội dung
         mailSender.send(userMimeMessage); // Gửi email cho người dùng
 
         // Email cho phòng ban được chọn
@@ -264,7 +266,7 @@ public class UserController {
             departmentHelper.setFrom("xuanloc290901@gmail.com"); // Email người gửi
             departmentHelper.setTo(departmentEmail); // Email người nhận lấy từ thông tin phòng ban
             departmentHelper.setSubject(subject); // Tiêu đề
-            departmentHelper.setText("bạn có 1 yêu cầu từ " + name + "\nPhone: " + phone + "\nMessage: " + message, false); // Nội dung
+            departmentHelper.setText("Bạn có 1 yêu cầu từ " + name + "\nPhone: " + phone + "\nMessage: " + message + "\nTicket ID: " + code, false); // Nội dung
             // Thiết lập category khi gửi email
             departmentMimeMessage.setHeader("X-Mailer-Category", selectedDepartment.getName());
             mailSender.send(departmentMimeMessage); // Gửi email cho phòng ban được chọn
@@ -408,6 +410,9 @@ public class UserController {
             model.addAttribute("roles", roles); // Đưa danh sách các vai trò vào model
         }
         model.addAttribute("user", sessionUser);
+        Long userId = (Long) session.getAttribute("userId");
+        User user = userService.getUser(userId);
+        chat.setUser(user);
         chat.setEndTime(LocalDateTime.now());
         chatService.saveChat(chat);
         return "User/Chat";

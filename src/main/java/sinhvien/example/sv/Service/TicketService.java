@@ -59,9 +59,9 @@ public class TicketService {
             String keywordLowerCase = keyword.toLowerCase();
             String subjectLowerCase = ticket.getSubject().toLowerCase();
             String phoneLowerCase = ticket.getPhone().toLowerCase();
-            String idLowerCase = ticket.getId().toString().toLowerCase();
+            String codeLowerCase = ticket.getCode().toString().toLowerCase();
             String departmentLowerCase = ticket.getDepartment().getName().toLowerCase();
-            if (subjectLowerCase.contains(keywordLowerCase) || phoneLowerCase.contains(keywordLowerCase) || idLowerCase.contains(keywordLowerCase) || departmentLowerCase.contains(keywordLowerCase)) {
+            if (subjectLowerCase.contains(keywordLowerCase) || phoneLowerCase.contains(keywordLowerCase) || codeLowerCase.contains(keywordLowerCase) || departmentLowerCase.contains(keywordLowerCase)) {
                 matchedTickets.add(ticket); // Thêm ticket vào danh sách các ticket khớp
             }
         }
